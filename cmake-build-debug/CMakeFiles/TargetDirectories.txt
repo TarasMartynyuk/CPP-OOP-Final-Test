@@ -1,3 +1,0 @@
-/mnt/c/CodeProjects/CLion/OOP/OOPFinalExam/cmake-build-debug/CMakeFiles/edit_cache.dir
-/mnt/c/CodeProjects/CLion/OOP/OOPFinalExam/cmake-build-debug/CMakeFiles/rebuild_cache.dir
-/mnt/c/CodeProjects/CLion/OOP/OOPFinalExam/cmake-build-debug/CMakeFiles/OOPFinalExam.dir
