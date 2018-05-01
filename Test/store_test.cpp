@@ -20,13 +20,13 @@ void test_store()
 
 void IncludeExcludeCanExclude_Throws_WhenNotRegistered()
 {
-    expressionThrows<invalid_argument>([]() {
-        Store().include(goods, Supply(20, kInPast, kInFuture));
+    expressionThrows<Store::GoodsNotRegistered>([]() {
+        Store().include(goods, Supply(20, kInPast, kInFutureSooner));
     });
-    expressionThrows<invalid_argument>([]() {
+    expressionThrows<Store::GoodsNotRegistered>([]() {
         Store().exclude(goods, 10);
     });
-    expressionThrows<invalid_argument>([]() {
+    expressionThrows<Store::GoodsNotRegistered>([]() {
         Store().canExclude(goods, 10);
     });
 
@@ -38,7 +38,7 @@ void Include_ChangesAmount()
     setup();
 
     size_t old_amount = st.totalAmount(goods);
-    st.include(goods, Supply(30, kInPast, kInFuture));
+    st.include(goods, Supply(30, kInPast, kInFutureSooner));
 
     assert(st.totalAmount(goods) == old_amount + 30);
     logPassed(__FUNCTION__);
@@ -48,13 +48,12 @@ void Exclude_ChangesAmount()
 {
     setup();
 
-    st.include(goods, Supply(30, kInPast, kInFuture));
+    st.include(goods, Supply(30, kInPast, kInFutureSooner));
     size_t old_amount = st.totalAmount(goods);
 
+    st.exclude(goods, 20);
 
-    st.exclude(goods, 70);
-
-    assert(st.totalAmount(goods) == old_amount - 10);
+    assert(st.totalAmount(goods) == old_amount - 20);
     logPassed(__FUNCTION__);
 }
 
@@ -62,7 +61,7 @@ void Exclude_ChangesAmount()
 void setup()
 {
     st = Store();
-//    st.registerGoods(goods, 0);
+    st.registerGoods(goods, 0);
 
 }
 

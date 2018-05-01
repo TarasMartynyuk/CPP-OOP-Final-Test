@@ -9,7 +9,7 @@ bool Store::goodsRegistered(const Goods& good) const
     return goods_supplies_.count(good.id()) == 1;
 }
 
-void Store::registerGoods(const Goods& gd, const size_t min_amount)
+void Store::registerGoods(const Goods& gd, amount_t min_amount)
 {
     if(goodsRegistered(gd))
         { throw invalid_argument("goods already registered"); }
@@ -33,8 +33,6 @@ void Store::exclude(const Goods& gds, const size_t amount)
 
     if(! canExclude(gds, amount))
         { throw Lack(gds, amount); }
-
-
 }
 
 bool Store::canExclude(const Goods& goods, const int amount) const
@@ -44,7 +42,8 @@ bool Store::canExclude(const Goods& goods, const int amount) const
 
     GoodsSupplies supplies = goods_supplies_.at(goods.id());
 
-    return supplies.totalAmount() - amount >= supplies.minAmount();
+    return supplies.totalAmount() > amount &&
+        supplies.totalAmount() - amount >= supplies.minAmount();
 }
 
 size_t Store::totalAmount(const Goods& goods) const

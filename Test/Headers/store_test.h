@@ -9,6 +9,7 @@ void test_store();
 void IncludeExcludeCanExclude_Throws_WhenNotRegistered();
 
 void Include_ChangesAmount();
+void Exclude_ThrowsLack_IfNotEnoughItems();
 void Exclude_ChangesAmount();
 void Cannot_ExcludeToLessThanMin();
 

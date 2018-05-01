@@ -15,19 +15,20 @@ const Date& Supply::manufacturingDate() const
 Date& Supply::manufacturingDate()
     { return date_manufactured_; }
 
-const Date& Supply::expiringDate() const
+const Date& Supply::expirationDate() const
     { return date_expires_; }
 
-Date& Supply::expiringDate()
+Date& Supply::expirationDate()
     { return date_expires_; }
 
-size_t& Supply::amount()
+Supply::amount_t& Supply::amount()
     { return amount_; }
 
-const size_t& Supply::amount() const
+const Supply::amount_t& Supply::amount() const
     { return  amount_; }
 
 
-
-
-
+bool operator>(const Supply& left, const Supply& right)
+{
+    return left.expirationDate() > right.expirationDate();
+}

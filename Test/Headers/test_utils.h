@@ -7,7 +7,8 @@
 #include "Date.h"
 
 const Date kInPast(2018, 3, 30);
-const Date kInFuture(2019, 4, 30);
+const Date kInFutureSooner(2019, 4, 30);
+const Date kInFutureLater(2019, 5, 4);
 
 template <typename TException>
 bool expressionThrows( void (*const expression)())
