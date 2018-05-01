@@ -10,17 +10,6 @@ GoodsSupplies::GoodsSupplies(
     : goods_(goods), min_amount_(min_amount),
       total_amount_(0), supplies(5) {}
 
-//GoodsSupplies::GoodsSupplies(
-//    const Goods& goods, size_t min_amount, size_t init_amount)
-//    : GoodsSupplies(goods, min_amount)
-//{
-//    if(init_amount == 0)
-//        { throw invalid_argument("init_amount must be more than 0");  }
-//
-//    addSupply()
-//}
-//region properties
-
 size_t& GoodsSupplies::totalAmount()
     { return total_amount_; }
 
@@ -34,9 +23,11 @@ const size_t& GoodsSupplies::minAmount() const
     { return min_amount_; }
 //endregion
 
-const void GoodsSupplies::addSupply(const Date&, size_t amount)
+const void GoodsSupplies::addSupply(size_t amount,
+    const Date& date_manufactured, const Date& date_expires)
 {
-    return;
+    supplies.push_back(Supply(amount, date_manufactured, date_expires));
+    totalAmount() += amount;
 }
 
 

@@ -4,6 +4,7 @@
 #include <cassert>
 #include "GoodsSupplies.h"
 #include "goods_supplies_test.h"
+#include "test_utils.h"
 
 const Date kInPast(2018, 4, 30);
 const Date kInFuture(2019, 4, 30);
@@ -22,9 +23,10 @@ void AddSupply_ChangesTotalAmount()
 
     size_t old_total = supplies.totalAmount();
 
-    supplies.addSupply(kInFuture, 20);
+    supplies.addSupply(20, kInPast, kInFuture);
 
     assert(supplies.totalAmount() == 20);
+    logPassed(__FUNCTION__);
 }
 
 
