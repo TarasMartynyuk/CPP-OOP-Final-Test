@@ -8,24 +8,24 @@ using namespace std;
 //region ctors
 
 GoodsSupplies::GoodsSupplies(
-    const Goods& goods, size_t min_amount)
+    const Goods& goods, int min_amount)
     : goods_(goods), min_amount_(min_amount),
-      total_amount_(0), supplies(5) {}
+      total_amount_(0) {}
 
 GoodsSupplies::GoodsSupplies(const GoodsSupplies& other)
     : GoodsSupplies(other.goods(), other.minAmount()) {}
 //endregion
 
-size_t& GoodsSupplies::totalAmount()
+int& GoodsSupplies::totalAmount()
     { return total_amount_; }
 
-const size_t& GoodsSupplies::totalAmount() const
+const int& GoodsSupplies::totalAmount() const
     { return total_amount_; }
 
-size_t& GoodsSupplies::minAmount()
+int& GoodsSupplies::minAmount()
     { return  min_amount_; }
 
-const size_t& GoodsSupplies::minAmount() const
+const int& GoodsSupplies::minAmount() const
     { return min_amount_; }
 //endregion
 

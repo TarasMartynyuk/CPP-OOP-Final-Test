@@ -21,7 +21,7 @@ void Store::registerGoods(const Goods& gd, const size_t min_amount)
 void Store::include(const Goods& goods, const Supply& supply)
 {
     if(! goodsRegistered(goods))
-        { throw invalid_argument("no such goods registered"); }
+        { throw GoodsNotRegistered(goods); }
 
     goods_supplies_.at(goods.id()).addSupply(supply);
 }
@@ -29,7 +29,7 @@ void Store::include(const Goods& goods, const Supply& supply)
 void Store::exclude(const Goods& gds, const size_t amount)
 {
     if(! goodsRegistered(gds))
-        { throw invalid_argument("no such goods registered"); }
+        { throw GoodsNotRegistered(gds); }
 
     if(! canExclude(gds, amount))
         { throw Lack(gds, amount); }
@@ -37,19 +37,20 @@ void Store::exclude(const Goods& gds, const size_t amount)
 
 }
 
-bool Store::canExclude(const Goods& goods, const size_t amount) const
+bool Store::canExclude(const Goods& goods, const int amount) const
 {
     if(! goodsRegistered(goods))
-        { throw invalid_argument("no such goods registered"); }
+        { throw GoodsNotRegistered(goods); }
 
     GoodsSupplies supplies = goods_supplies_.at(goods.id());
+
     return supplies.totalAmount() - amount >= supplies.minAmount();
 }
 
 size_t Store::totalAmount(const Goods& goods) const
 {
     if(! goodsRegistered(goods))
-        { throw invalid_argument("no such goods registered"); }
+        { throw GoodsNotRegistered(goods); }
 
     return goods_supplies_.at(goods.id()).totalAmount();
 }

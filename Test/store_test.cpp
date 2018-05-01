@@ -52,7 +52,7 @@ void Exclude_ChangesAmount()
     size_t old_amount = st.totalAmount(goods);
 
 
-    st.exclude(goods, 10);
+    st.exclude(goods, 70);
 
     assert(st.totalAmount(goods) == old_amount - 10);
     logPassed(__FUNCTION__);
@@ -62,7 +62,7 @@ void Exclude_ChangesAmount()
 void setup()
 {
     st = Store();
-    st.registerGoods(goods, 0);
+//    st.registerGoods(goods, 0);
 
 }
 

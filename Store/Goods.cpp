@@ -42,6 +42,7 @@ ostream& operator<<(ostream& os, const Goods& gds)
 {
     os << "{ id : " << gds.id()
         << " name : " << gds.name()
-        << " price : " << gds.pricePerItem();
-    return <#initializer#>;
+        << " price : " << gds.pricePerItem()
+        << " }";
+    return os;
 }
