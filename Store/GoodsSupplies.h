@@ -1,13 +1,12 @@
 //
 // Created by Taras Martynyuk on 5/1/2018.
 //
-
 #ifndef OOPFINALEXAM_GOODSINFO_H
 #define OOPFINALEXAM_GOODSINFO_H
 
 #include <cstddef>
 #include <vector>
-#include <Store/DateTime/DateTime.h>
+#include "Date.h"
 #include "Goods.h"
 #include "Supply.h"
 
@@ -16,20 +15,27 @@
 class GoodsSupplies
 {
 public:
-    GoodsSupplies(const Goods&, size_t min_amout, size_t init_amount);
+    // can create with amount less than specified min
+    GoodsSupplies(const Goods&, size_t min_amount);
+//    GoodsSupplies(const Goods&, size_t min_amount, size_t init_amount);
 
     size_t& totalAmount();
     const size_t& totalAmount() const;
     size_t& minAmount();
     const size_t& minAmount() const;
 
-    const void addSupply(const DateTime&, size_t amount);
+    const void addSupply(const Date&, size_t amount);
     // the date of the expiration of the next supply
-    const DateTime& nextExpirationDate();
+    const Date& nextExpirationDate();
     void removeSupplyThatExpiresNext();
 
+private:
+    const Goods goods_;
+    size_t total_amount_;
+    size_t min_amount_;
+
     //change to priority queue
-    std::vector<Supply> goodsGroups;
+    std::vector<Supply> supplies;
 };
 
 

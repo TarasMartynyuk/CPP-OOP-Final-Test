@@ -3,12 +3,31 @@
 //
 #ifndef OOPFINALEXAM_SUPPLY_H
 #define OOPFINALEXAM_SUPPLY_H
-#include <Store/DateTime/DateTime.h>
+#include "Date.h"
 
-struct Supply
+// a supply of goods - a package that was "included" to a store
+// during some delivery
+class Supply
 {
-    DateTime date_expires;
-    size_t amount;
+public:
+    Supply(size_t amount, const Date& date_manufactured,
+        const Date& date_expires);
+
+    Supply();
+
+    Date& dateManufactured();
+    const Date& dateManufactured() const;
+    Date& dateExpires();
+    const Date& dateExpires() const;
+
+    size_t& amount();
+    const size_t& amount() const;
+
+
+private:
+    Date date_manufactured_;
+    Date date_expires_;
+    size_t amount_;
 };
 
 #endif //OOPFINALEXAM_SUPPLY_H

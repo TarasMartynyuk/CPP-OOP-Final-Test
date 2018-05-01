@@ -5,28 +5,22 @@
 #define OOPFINALEXAM_GOODS_H
 #include <glob.h>
 #include <string>
-#include "DateTime.h"
+#include "Date.h"
 
+// data to identify goods
 class Goods
 {
 public:
-    Goods(size_t id, std::string name,
-        DateTime dateManufactured, DateTime dateExpires);
+    Goods(size_t id, std::string name);
 
     size_t& id();
     const size_t& id() const;
     std::string& name();
     const std::string& name() const;
-    DateTime& dateManufactured();
-    const DateTime& dateManufactured() const;
-    DateTime& dateExpires();
-    const DateTime& dateExpires() const;
 
 private:
     size_t id_;
     std::string name_;
-    DateTime date_manufactured_;
-    DateTime date_expires_;
 };
 
 #endif //OOPFINALEXAM_GOODS_H

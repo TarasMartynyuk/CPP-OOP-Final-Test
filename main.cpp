@@ -3,20 +3,30 @@
 #include <ctime>
 #include <sstream>
 #include <iomanip>
-
+#include "Test/Headers/test.h"
 using namespace std;
+
 int main()
 {
-    chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+//    run_all_tests();
+    tm orig;
 
-    time_t in_time_t = std::chrono::system_clock::to_time_t(now);
+    orig.tm_mday = 1;
+    orig.tm_year = 118;
+    orig.tm_mon = 4;
 
-    std::stringstream ss;
+    std::stringstream orig_ss;
+    orig_ss << std::put_time(&orig, "%Y-%m-%d %X");
+    std::cout << orig_ss.str() << std::endl;
 
-    auto tm = std::localtime(&in_time_t);
+    time_t tmstmp = mktime(&orig);
 
-    ss << std::put_time(std::localtime(&in_time_t), "%Y-%m-%d %X");
+    tm* there_and_back_again = localtime(&tmstmp);
 
-    std::cout << ss.str() << std::endl;
+//    chrono::time_point<std::chrono::system_clock> now = std::chrono::system_clock::now();
+//    time_t in_time_t = std::chrono::system_clock::to_time_t(now);
+    std::stringstream taba_ss;
+    taba_ss << std::put_time(there_and_back_again, "%Y-%m-%d %X");
+    std::cout << taba_ss.str() << std::endl;
     return 0;
 }
