@@ -48,9 +48,11 @@ private:
     amount_t total_amount_;
     amount_t min_amount_;
 
-    //change to priority queue
     std::priority_queue<Supply, std::vector<Supply>,
         Supply::ExpirationComparator> supplies;
+
+    void modifySupplyExpiringSoonest(amount_t new_amount);
+    const Supply& peekSupplyExpiringSoonest();
 };
 
 

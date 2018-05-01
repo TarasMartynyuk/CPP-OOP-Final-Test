@@ -3,6 +3,7 @@
 //
 #include <stdexcept>
 #include <cassert>
+#include <Store/Headers/Store.h>
 #include "GoodsSupplies.h"
 using namespace std;
 
@@ -48,24 +49,70 @@ const void GoodsSupplies::addSupply(Supply supply)
 }
 
 const Goods& GoodsSupplies::goods() const
-{
-    return goods_;
-}
+    { return goods_; }
 
 void GoodsSupplies::removeSupplyExpiringSoonest()
 {
     if(supplies.size() == 0)
         { throw logic_error("supplies empty"); }
 
-    assert(totalAmount() > supplies.top().amount());
-    total_amount_ -= supplies.top().amount();
+    assert(totalAmount() >= supplies.top().amount());
+    total_amount_ -= peekSupplyExpiringSoonest().amount();
     supplies.pop();
 }
 
 const Date& GoodsSupplies::nextExpirationDate()
 {
-    return supplies.top().expirationDate();
+    return peekSupplyExpiringSoonest().expirationDate();
 }
+
+void GoodsSupplies::removeNGoodsExpiringSoonest(GoodsSupplies::amount_t items)
+{
+    if(items <= 0)
+        { throw invalid_argument("cannot remove less than 1 items"); }
+    if(totalAmount() < items)
+        { throw Store::Lack(goods(), items); }
+
+    amount_t sum = 0;
+
+    while(sum < items)
+    {
+        // we can satisfy the requirement this iteration
+        amount_t left = items - sum;
+        if(left < peekSupplyExpiringSoonest().amount())
+        {
+            modifySupplyExpiringSoonest(peekSupplyExpiringSoonest().amount() - left);
+            sum += left;
+        }
+        else
+        {
+            sum += peekSupplyExpiringSoonest().amount();
+            removeSupplyExpiringSoonest();
+
+            if(sum == items)
+                { return; }
+        }
+        assert(supplies.size() != 0);
+    }
+
+    total_amount_ -= items;
+}
+
+void GoodsSupplies::modifySupplyExpiringSoonest(GoodsSupplies::amount_t new_amount)
+{
+    Supply top_cp = peekSupplyExpiringSoonest();
+
+    removeSupplyExpiringSoonest();
+
+    top_cp.amount() = new_amount;
+    supplies.emplace(top_cp);
+}
+
+const Supply& GoodsSupplies::peekSupplyExpiringSoonest()
+{
+    return supplies.top();
+}
+
 
 
 

@@ -3,6 +3,7 @@
 //
 #include <cassert>
 #include <stdexcept>
+#include "Store.h"
 #include "GoodsSupplies.h"
 #include "goods_supplies_test.h"
 #include "test_utils.h"
@@ -22,6 +23,10 @@ void run_all_supplies_tests()
     NextExpDate_ReturnsTheLeastDate_OfTheAddedSupplies();
 
     RemoveSupplyExpNext_ChangesAmount();
+
+    RemoveNGoods_ThrowsLack_IfNotEnoughItems();
+    RemoveNGoods_ChangesTotalAmount();
+    RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods();
 }
 
 //region addSupply
@@ -106,15 +111,49 @@ void RemoveSupplyExpNext_ChangesAmount()
 
 void RemoveNGoods_ThrowsLack_IfNotEnoughItems()
 {
-    GoodsSupplies gs = testInstance();
+    expressionThrows<Store::Lack>([]()
+    {
+        GoodsSupplies gs = testInstance();
 
+        gs.addSupply(Supply(5, kInPast, kInFutureLater));
 
+        gs.removeNGoodsExpiringSoonest(10);
+    });
+    logPassed(__FUNCTION__);
 }
 
 void RemoveNGoods_ChangesTotalAmount()
 {
+    GoodsSupplies gs = testInstance();
 
+    gs.addSupply(Supply(10, kInPast, kInFutureLater));
+    Supply::amount_t old_amount = gs.totalAmount();
+
+
+    gs.removeNGoodsExpiringSoonest(10);
+
+    assert(old_amount == gs.totalAmount() + 10);
+    logPassed(__FUNCTION__);
 }
+
+void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods()
+{
+    GoodsSupplies gs = testInstance();
+
+    gs.addSupply(Supply(10, kInPast, kInFutureLater));
+    gs.addSupply(Supply(10, kInPast, kInFutureSooner));
+
+
+    Date  old_next = gs.nextExpirationDate();
+
+    gs.removeNGoodsExpiringSoonest(5);
+
+    Date new_next = gs.nextExpirationDate();
+    assert(old_next == new_next);
+    logPassed(__FUNCTION__);
+}
+
+
 //endregion
 
 
