@@ -26,24 +26,26 @@ void Store::include(const Goods& goods, const Supply& supply)
     goods_supplies_.at(goods.id()).addSupply(supply);
 }
 
-void Store::exclude(const Goods& gds, const size_t amount)
+void Store::exclude(const Goods& gds, amount_t amount)
 {
     if(! goodsRegistered(gds))
         { throw GoodsNotRegistered(gds); }
 
+    GoodsSupplies& supplies = goods_supplies_.at(gds.id());
+
+   // duplicating check for Lack here, but this way the impl of Store is independent from impl of GoodsSupplies
     if(! canExclude(gds, amount))
         { throw Lack(gds, amount); }
+
+    supplies.removeNGoodsExpiringSoonest(amount);
 }
 
-bool Store::canExclude(const Goods& goods, const int amount) const
+bool Store::canExclude(const Goods& goods, amount_t amount) const
 {
     if(! goodsRegistered(goods))
         { throw GoodsNotRegistered(goods); }
 
-    GoodsSupplies supplies = goods_supplies_.at(goods.id());
-
-    return supplies.totalAmount() > amount &&
-        supplies.totalAmount() - amount >= supplies.minAmount();
+    return canExclude(goods, amount, goods_supplies_.at(goods.id()));
 }
 
 size_t Store::totalAmount(const Goods& goods) const
@@ -52,6 +54,14 @@ size_t Store::totalAmount(const Goods& goods) const
         { throw GoodsNotRegistered(goods); }
 
     return goods_supplies_.at(goods.id()).totalAmount();
+}
+
+bool Store::canExclude(
+    const Goods& goods, Store::amount_t amount,
+    const GoodsSupplies& supplies)
+{
+    return supplies.totalAmount() > amount &&
+           supplies.totalAmount() - amount >= supplies.minAmount();
 }
 
 

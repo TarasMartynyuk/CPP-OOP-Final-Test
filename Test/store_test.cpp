@@ -15,7 +15,10 @@ void test_store()
 {
     IncludeExcludeCanExclude_Throws_WhenNotRegistered();
     Include_ChangesAmount();
+
+    Exclude_ThrowsLack_IfNotEnoughItems();
     Exclude_ChangesAmount();
+    Cannot_ExcludeToLessThanMin();
 }
 
 void IncludeExcludeCanExclude_Throws_WhenNotRegistered()
@@ -49,11 +52,37 @@ void Exclude_ChangesAmount()
     setup();
 
     st.include(goods, Supply(30, kInPast, kInFutureSooner));
-    size_t old_amount = st.totalAmount(goods);
+    Store::amount_t old_amount = st.totalAmount(goods);
 
     st.exclude(goods, 20);
 
-    assert(st.totalAmount(goods) == old_amount - 20);
+    Store::amount_t new_am = st.totalAmount(goods);
+    assert(new_am == old_amount - 20);
+    logPassed(__FUNCTION__);
+}
+
+void Exclude_ThrowsLack_IfNotEnoughItems()
+{
+    expressionThrows<Store::Lack>([]() {
+
+        setup();
+
+        st.include(goods, Supply(20, kInPast, kInFutureSooner));
+        st.exclude(goods, 50);
+    });
+    logPassed(__FUNCTION__);
+}
+
+void Cannot_ExcludeToLessThanMin()
+{
+    expressionThrows<Store::Lack>([]() {
+
+        setup();
+        Goods gds(10, "test2", 3);
+        st.registerGoods(gds, 30);
+        st.include(goods, Supply(40, kInPast, kInFutureSooner));
+        st.exclude(goods, 20);
+    });
     logPassed(__FUNCTION__);
 }
 

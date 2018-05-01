@@ -15,7 +15,8 @@ GoodsSupplies::GoodsSupplies(
       total_amount_(0) {}
 
 GoodsSupplies::GoodsSupplies(const GoodsSupplies& other)
-    : GoodsSupplies(other.goods(), other.minAmount()) {}
+    : goods_(other.goods()), min_amount_(other.minAmount()),
+      total_amount_(other.totalAmount()), supplies(other.supplies) {}
 //endregion
 
 //region properties
@@ -61,7 +62,7 @@ void GoodsSupplies::removeSupplyExpiringSoonest()
     supplies.pop();
 }
 
-const Date& GoodsSupplies::nextExpirationDate()
+const Date& GoodsSupplies::nextExpirationDate() const
 {
     return peekSupplyExpiringSoonest().expirationDate();
 }
@@ -94,8 +95,6 @@ void GoodsSupplies::removeNGoodsExpiringSoonest(GoodsSupplies::amount_t items)
         }
         assert(supplies.size() != 0);
     }
-
-    total_amount_ -= items;
 }
 
 void GoodsSupplies::modifySupplyExpiringSoonest(GoodsSupplies::amount_t new_amount)
@@ -105,10 +104,10 @@ void GoodsSupplies::modifySupplyExpiringSoonest(GoodsSupplies::amount_t new_amou
     removeSupplyExpiringSoonest();
 
     top_cp.amount() = new_amount;
-    supplies.emplace(top_cp);
+    addSupply(top_cp);
 }
 
-const Supply& GoodsSupplies::peekSupplyExpiringSoonest()
+const Supply& GoodsSupplies::peekSupplyExpiringSoonest() const
 {
     return supplies.top();
 }

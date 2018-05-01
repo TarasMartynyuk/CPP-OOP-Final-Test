@@ -27,12 +27,17 @@ public:
 
     // true if the store can give amount items of type g
     // throws if g is not registered
-    bool canExclude(const Goods& goods, int amount) const;
+    bool canExclude(const Goods& goods, amount_t amount) const;
     size_t totalAmount(const Goods&) const;
 
 private:
     // id : goods info
     std::unordered_map<size_t, GoodsSupplies> goods_supplies_;
+
+    // oh this may need to be in the GoodsSupplies class actually
+    static bool canExclude(
+        const Goods& goods, amount_t amount,
+        const GoodsSupplies& supplies);
 };
 
 //region exceptions

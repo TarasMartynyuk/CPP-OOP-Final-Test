@@ -37,13 +37,15 @@ public:
     void removeNGoodsExpiringSoonest(amount_t items);
 
     // the date of the expiration of the next supply
-    const Date& nextExpirationDate();
+    const Date& nextExpirationDate() const;
 
     // throws away the whole supply that would expire soonest
     // (or maybe have expired already)
     void removeSupplyExpiringSoonest();
 
 private:
+    // no impl
+    void operator=(const GoodsSupplies&);
     const Goods goods_;
     amount_t total_amount_;
     amount_t min_amount_;
@@ -52,7 +54,7 @@ private:
         Supply::ExpirationComparator> supplies;
 
     void modifySupplyExpiringSoonest(amount_t new_amount);
-    const Supply& peekSupplyExpiringSoonest();
+    const Supply& peekSupplyExpiringSoonest() const;
 };
 
 
