@@ -5,6 +5,6 @@ set(CMAKE_CXX_STANDARD 11)
 
 FILE(GLOB sources ./*.cpp ./*.h  */*.cpp */*.h */*/*.cpp */*/*.h)
 
-include_directories(. Store Test Test/Store)
+include_directories(. Store Test Test/Store Store/DateTime)
 add_executable(OOPFinalExam ${sources})
 
