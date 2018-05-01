@@ -8,8 +8,6 @@
 #include "test_utils.h"
 using namespace std;
 
-const Date kInPast(2018, 3, 30);
-const Date kInFuture(2019, 4, 30);
 const size_t kMinAmount = 10;
 
 GoodsSupplies testInstance();
@@ -27,7 +25,7 @@ void AddSupply_ChangesTotalAmount()
 
     size_t old_total = supplies.totalAmount();
 
-    supplies.addSupply(20, kInPast, kInFuture);
+    supplies.addSupply(Supply(20, kInPast, kInFuture));
 
     assert(supplies.totalAmount() == old_total + 20);
     logPassed(__FUNCTION__);
@@ -38,7 +36,7 @@ void AddSupply_Throws_IfAddingExpired()
     assert(expressionThrows<invalid_argument>([]() -> void
     {
         auto supplies = testInstance();
-        supplies.addSupply(2, kInPast, kInPast);
+        supplies.addSupply(Supply(20, kInPast, kInPast));
     }));
     logPassed(__FUNCTION__);
 }
@@ -48,7 +46,7 @@ void AddSupply_Throws_IfAddingManufacturedInFuture()
     assert(expressionThrows<invalid_argument>([]() -> void
     {
         auto supplies = testInstance();
-        supplies.addSupply(2, kInFuture, kInFuture);
+        supplies.addSupply(Supply(20, kInFuture, kInFuture));
     }));
     logPassed(__FUNCTION__);
 }

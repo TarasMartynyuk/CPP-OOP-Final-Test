@@ -9,16 +9,16 @@ Supply::Supply(size_t amount, const Date& date_manufactured, const Date& date_ex
 
 Supply::Supply() : Supply(0, Date::kDefaultDate, Date::kDefaultDate) {}
 
-const Date& Supply::dateManufactured() const
+const Date& Supply::manufacturingDate() const
     { return date_manufactured_; }
 
-Date& Supply::dateManufactured()
+Date& Supply::manufacturingDate()
     { return date_manufactured_; }
 
-const Date& Supply::dateExpires() const
+const Date& Supply::expiringDate() const
     { return date_expires_; }
 
-Date& Supply::dateExpires()
+Date& Supply::expiringDate()
     { return date_expires_; }
 
 size_t& Supply::amount()
