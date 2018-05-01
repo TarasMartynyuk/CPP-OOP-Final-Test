@@ -4,8 +4,8 @@
 #include "Goods.h"
 using namespace std;
 
-Goods::Goods(size_t id, std::string name)
-    : id_(id), name_(name) {}
+Goods::Goods(size_t id, std::string name, size_t price_per_item)
+    : id_(id), name_(name), price_per_item_(price_per_item) {}
 
 const size_t& Goods::id() const
 {
@@ -25,5 +25,15 @@ const string& Goods::name() const
 std::string& Goods::name()
 {
     return name_;
+}
+
+size_t& Goods::pricePerItem()
+{
+    return price_per_item_;
+}
+
+const size_t& Goods::pricePerItem() const
+{
+    return price_per_item_;
 }
 

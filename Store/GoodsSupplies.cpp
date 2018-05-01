@@ -24,9 +24,18 @@ const size_t& GoodsSupplies::minAmount() const
 //endregion
 
 const void GoodsSupplies::addSupply(size_t amount,
-    const Date& date_manufactured, const Date& date_expires)
+    const Date& manufacturing_date, const Date& expiration_date)
 {
-    supplies.push_back(Supply(amount, date_manufactured, date_expires));
+    if(amount == 0)
+        { throw invalid_argument("cannot add a supply of 0 items"); }
+
+    if(isInPast(expiration_date))
+        { throw invalid_argument("cannot add expired goods"); }
+
+    if(isInFuture(manufacturing_date))
+        { throw invalid_argument("manufacturing_date must be in the past");}
+
+    supplies.push_back(Supply(amount, manufacturing_date, expiration_date));
     totalAmount() += amount;
 }
 

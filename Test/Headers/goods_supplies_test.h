@@ -9,3 +9,4 @@ void run_all_supplies_tests();
 
 void AddSupply_ChangesTotalAmount();
 void AddSupply_Throws_IfAddingExpired();
+void AddSupply_Throws_IfAddingManufacturedInFuture();
