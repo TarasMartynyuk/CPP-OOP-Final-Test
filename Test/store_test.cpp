@@ -8,8 +8,7 @@
 using namespace std;
 
 const Goods goods (0, "test_goods", 2);
-Store st;
-void setup();
+Store testGInstance();
 
 void test_store()
 {
@@ -38,7 +37,7 @@ void IncludeExcludeCanExclude_Throws_WhenNotRegistered()
 
 void Include_ChangesAmount()
 {
-    setup();
+    Store st = testGInstance();
 
     size_t old_amount = st.totalAmount(goods);
     st.include(goods, Supply(30, kInPast, kInFutureSooner));
@@ -49,7 +48,7 @@ void Include_ChangesAmount()
 
 void Exclude_ChangesAmount()
 {
-    setup();
+    Store st = testGInstance();
 
     st.include(goods, Supply(30, kInPast, kInFutureSooner));
     Store::amount_t old_amount = st.totalAmount(goods);
@@ -65,7 +64,7 @@ void Exclude_ThrowsLack_IfNotEnoughItems()
 {
     expressionThrows<Store::Lack>([]() {
 
-        setup();
+        Store st = testGInstance();
 
         st.include(goods, Supply(20, kInPast, kInFutureSooner));
         st.exclude(goods, 50);
@@ -77,7 +76,7 @@ void Cannot_ExcludeToLessThanMin()
 {
     expressionThrows<Store::Lack>([]() {
 
-        setup();
+        Store st = testGInstance();
         Goods gds(10, "test2", 3);
         st.registerGoods(gds, 30);
         st.include(goods, Supply(40, kInPast, kInFutureSooner));
@@ -86,12 +85,12 @@ void Cannot_ExcludeToLessThanMin()
     logPassed(__FUNCTION__);
 }
 
-
-void setup()
+Store testGInstance()
 {
-    st = Store();
+    Store st;
     st.registerGoods(goods, 0);
 
+    return st;
 }
 
 

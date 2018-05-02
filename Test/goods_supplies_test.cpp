@@ -153,9 +153,7 @@ void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods()
     logPassed(__FUNCTION__);
 }
 
-
 //endregion
-
 
 GoodsSupplies testInstance()
 {

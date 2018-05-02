@@ -2,6 +2,7 @@
 // Created by Taras Martynyuk on 5/1/2018.
 //
 #include "Store.h"
+#include "Discounter.h"
 using  namespace std;
 
 bool Store::goodsRegistered(const Goods& good) const
@@ -63,5 +64,32 @@ bool Store::canExclude(
     return supplies.totalAmount() > amount &&
            supplies.totalAmount() - amount >= supplies.minAmount();
 }
+
+Store::Store()
+    : goods_supplies_() {}
+
+void Store::show()
+{
+    cout << "store with goods : { ";
+    unordered_map<size_t, GoodsSupplies>::iterator it = goods_supplies_.begin();
+
+    while(it != goods_supplies_.end())
+    {
+        cout << "\t";
+        std::cout << it->second;
+        cout << "\n";
+        it++;
+    }
+    cout << "}";
+}
+
+
+
+//void Store::makePurchase(std::vector<PurchaseItem>)
+//{
+//    // get this from removeNGoodsExpiringSoonest - needs refactoring
+//    vector<Supply> supplies_to_rem;
+//    cash_register_.makePurchase(Discounter::applyDiscountsIfNeeded(supplies_to_rem));
+//}
 
 

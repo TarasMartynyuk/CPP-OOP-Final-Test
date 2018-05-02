@@ -3,7 +3,7 @@
 //
 #include <stdexcept>
 #include <cassert>
-#include <Store/Headers/Store.h>
+#include "Store.h"
 #include "GoodsSupplies.h"
 using namespace std;
 
@@ -113,7 +113,10 @@ const Supply& GoodsSupplies::peekSupplyExpiringSoonest() const
 }
 
 
-
-
-
-
+std::ostream& operator<<(std::ostream& os, const GoodsSupplies& supplies)
+{
+    os << " { goods : " << supplies.goods()
+       << "\n\t totalAmount : " << supplies.totalAmount()
+       << "\n\t minAmount : " << supplies.minAmount()
+       << "\n}";
+}

@@ -5,6 +5,7 @@
 #define OOPFINALEXAM_DATETIME_H
 #include <ctime>
 #include <string>
+#include "TimeDelta.h"
 
 // a point in time after POSIX era,
 // represented by date and time
@@ -52,6 +53,12 @@ bool operator==(const Date&, const Date&);
 bool operator<(const Date&, const Date&);
 bool operator>(const Date&, const Date&);
 
+// stub
+const TimeDelta operator-(const Date&, const Date&);
+
+
 bool isInFuture(const Date&);
 bool isInPast(const Date& date);
+
+
 #endif //OOPFINALEXAM_DATETIME_H

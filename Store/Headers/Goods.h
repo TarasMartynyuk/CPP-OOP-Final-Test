@@ -3,7 +3,6 @@
 //
 #ifndef OOPFINALEXAM_GOODS_H
 #define OOPFINALEXAM_GOODS_H
-#include <glob.h>
 #include <string>
 #include "Date.h"
 

@@ -6,10 +6,12 @@
 #define OOPFINALEXAM_DISCOUNT_H
 
 
+#include "TimeDelta.h"
+
 class Discount
 {
 public:
-    Discount()
+    Discount();
     // i have not implemented the timedelta class, and subtracting dates, but suppose i would
     // TimeDelta time left till the expiration to activate this
     float percents;

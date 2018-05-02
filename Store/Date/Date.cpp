@@ -151,3 +151,8 @@ bool operator==(const Date& left, const Date& right)
     return left.timestamp() == right.timestamp();
 }
 
+const TimeDelta operator-(const Date&, const Date&)
+{
+    return TimeDelta();
+}
+

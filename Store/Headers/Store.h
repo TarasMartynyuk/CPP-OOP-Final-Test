@@ -3,9 +3,13 @@
 //
 #ifndef OOPFINALEXAM_STORE_H
 #define OOPFINALEXAM_STORE_H
+#include "CashRegister.h"
 #include "Goods.h"
 #include "unordered_map"
 #include "GoodsSupplies.h"
+#include "PurchaseItem.h"
+
+class CashRegister;
 
 class Store
 {
@@ -14,8 +18,16 @@ public:
     class GoodsNotRegistered;
     using amount_t = GoodsSupplies::amount_t;
 
+    Store();
+
+    void show();
+
     void registerGoods(const Goods&, size_t min_amount);
     bool goodsRegistered(const Goods&) const;
+
+    // takes the purchase items without discounts
+    // and trades items for cash
+//    void makePurchase(std::vector<PurchaseItem>);
 
     // throws if g is not registered
     void include(const Goods& goods, const Supply& supply);
@@ -33,6 +45,7 @@ public:
 private:
     // id : goods info
     std::unordered_map<size_t, GoodsSupplies> goods_supplies_;
+//    CashRegister cash_register_;
 
     // oh this may need to be in the GoodsSupplies class actually
     static bool canExclude(
