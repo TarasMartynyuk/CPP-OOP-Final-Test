@@ -12,15 +12,13 @@
 class Store
 {
 public:
-    class Lack;
-    class GoodsNotRegistered;
     using amount_t = GoodsShelf::amount_t;
 
-    Store();
+    Store() = default;
 
-    void show();
+    void show() const;
 
-    void registerGoods(const Goods&, size_t min_amount);
+    void registerGoods(const Goods&, amount_t min_amount);
     bool goodsRegistered(const Goods&) const;
 
     // takes the purchase items without discounts
@@ -33,7 +31,7 @@ public:
     // throws Lack exception if there is less than minimum amount
     // of goods at the store
     // throws if g is not registered or if there is not enough goods
-    void exclude(const Goods& gds, size_t amount);
+    void exclude(const Goods& gds, amount_t amount);
 
     // true if the store can give amount items of type g
     // throws if g is not registered
@@ -49,28 +47,5 @@ private:
         const Goods& goods, amount_t amount,
         const GoodsShelf& supplies);
 };
-
-//region exceptions
-
-class Store::Lack : public std::logic_error
-{
-public:
-    Lack(const Goods&, size_t);
-    virtual char const * what() const noexcept;
-
-private:
-    std::string createMessage(const Goods&, size_t);
-};
-
-class Store::GoodsNotRegistered : public std::logic_error
-{
-public:
-    explicit GoodsNotRegistered(const Goods&);
-    virtual char const * what() const noexcept;
-
-private:
-    std::string createMessage(const Goods&);
-};
-//endregion
 
 #endif //OOPFINALEXAM_STORE_H

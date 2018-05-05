@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.5)
 project(OOPFinalExam)
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "-std=c++11")
+message(${CMAKE_CXX_FLAGS})
 
 set({CMAKE_BINARY_DIR} cmake-build-debug)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -18,12 +20,13 @@ execute_process(COMMAND "${CMAKE_COMMAND}" --build .
 # Add dateh directly to our build.
 add_subdirectory("${CMAKE_BINARY_DIR}/dateh-src" "${CMAKE_BINARY_DIR}/dateh-build")
 
-# Include headers dir to enable intellisence
-include_directories("${CMAKE_BINARY_DIR}/dateh-src/include/date")
+file(GLOB_RECURSE store_src ./Store/*.h ./Store/*.cpp)
 
-FILE(GLOB sources ./*.cpp ./*.h  ./*/*.cpp ./*/*.h  ./*/*/*.cpp ./*/*/*.h)
-include_directories(. Store Store/Date Store/Headers Store/Purchasing)
-include_directories(Test Test/Headers)
-add_executable(OOPFinalExam ${sources})
+#include_directories(Test/Headers)
+add_executable(OOPFinalExam ${store_src} main.cpp)
+
+# Include headers dir to enable intellisence
+target_include_directories(OOPFinalExam PRIVATE . Store/Headers Store/Purchasing)
+target_include_directories(OOPFinalExam PRIVATE "${CMAKE_BINARY_DIR}/dateh-src/include/date")
 
 target_link_libraries(OOPFinalExam tz)

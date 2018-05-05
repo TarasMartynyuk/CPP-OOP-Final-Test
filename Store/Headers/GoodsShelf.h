@@ -6,7 +6,6 @@
 #include <cstddef>
 #include <vector>
 #include <queue>
-#include "Date.h"
 #include "Goods.h"
 #include "Supply.h"
 
@@ -15,7 +14,7 @@
 class GoodsShelf
 {
 public:
-    using amount_t = Supply::amount_t;
+    using amount_t = GoodsSupply::amount_t;
 
     // can create with amount less than specified min
     GoodsShelf(const Goods& gds, amount_t min_amount);
@@ -40,7 +39,7 @@ public:
     void removeNGoodsExpiringSoonest(amount_t items);
 
     // the date of the expiration of the next supply
-    const date::local_days& nextExpirationDate() const;
+    const date::year_month_day& nextExpirationDate() const;
 
     // throws away the whole supply that would expire soonest
     // (or maybe have expired already)

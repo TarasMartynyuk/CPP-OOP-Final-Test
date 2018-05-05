@@ -1,6 +1,7 @@
 //
 // Created by Taras Martynyuk on 5/1/2018.
 //
+#include <Store/Headers/StoreExceptions.h>
 #include "Store.h"
 #include "Discounter.h"
 using  namespace std;
@@ -65,13 +66,10 @@ bool Store::canExclude(
            supplies.totalAmount() - amount >= supplies.minAmount();
 }
 
-Store::Store()
-    : goods_supplies_() {}
-
-void Store::show()
+void Store::show() const
 {
     cout << "store with goods : { ";
-    unordered_map<size_t, GoodsShelf>::iterator it = goods_supplies_.begin();
+    unordered_map<size_t, GoodsShelf>::const_iterator it = goods_supplies_.begin();
 
     while(it != goods_supplies_.end())
     {

@@ -4,13 +4,18 @@
 #ifndef OOPFINALEXAM_GOODS_H
 #define OOPFINALEXAM_GOODS_H
 #include <string>
-#include "Date.h"
+#include <iostream>
 
 // data to identify goods
 class Goods
 {
 public:
     Goods(size_t id, std::string name, size_t price_per_item);
+//    Goods() = default;
+    Goods()
+{
+    std::cout << "ctor";
+}
 
     size_t& id();
     const size_t& id() const;

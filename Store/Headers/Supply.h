@@ -26,12 +26,23 @@ public:
     void setExpirationDate(const date::year_month_day& expiration_date);
 
     const amount_t& amount() const;
+    void setAmount(amount_t amount);
 
-    void& setAmount(const amount_t amount);
+    Supply& operator=(const Supply&) = default;
+    ~Supply() = default;
 
 private:
     amount_t amount_;
     date::year_month_day expiration_date_;
+
 };
 
+
+struct Supply::ExpirationComparator
+{
+    bool operator()(const Supply& left, const Supply& right)
+    {
+        return left.expirationDate() > right.expirationDate();
+    }
+};
 #endif //OOPFINALEXAM_SUPPLY_H

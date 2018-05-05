@@ -19,7 +19,7 @@ private:
     // vec will be sorted by the Timedeltas
     // and we will check the supply against each of the discounts, stopping when some will have
     // timeDelta greater that time till expiration
-    static std::vector<std::pair<Discount, TimeDelta>> discounts;
+//    static std::vector<std::pair<Discount, TimeDelta>> discounts;
 };
 
 

@@ -22,7 +22,7 @@ void GoodsSupply::setDateManufactured(const year_month_day& date_manufactured)
 const Goods& GoodsSupply::goods() const
     { return goods_; }
 
-void& GoodsSupply::setGoods(const Goods& goods)
+void GoodsSupply::setGoods(const Goods& goods)
     { goods_ = goods; }
 
 GoodsSupply::amount_t GoodsSupply::amount() const

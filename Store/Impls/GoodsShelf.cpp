@@ -3,7 +3,7 @@
 //
 #include <stdexcept>
 #include <cassert>
-#include "Store.h"
+#include "StoreExceptions.h"
 #include "GoodsShelf.h"
 using namespace std;
 using namespace date;
@@ -21,6 +21,7 @@ GoodsShelf::GoodsShelf(const GoodsShelf& other)
 //endregion
 
 //region properties
+
 const Goods& GoodsShelf::goods() const
     { return goods_; }
 
@@ -41,19 +42,21 @@ void GoodsShelf::setMinAmount(
 
 //endregion
 
+//region methods
+
 void GoodsShelf::addSupply(Supply supply)
 {
-    if(supply.setAmount(nullptr) <= 0)
-        { throw invalid_argument("cannot add a supply of 0 or less items"); }
+    // it is handled in ctor, so we are asserting, not checking
+    assert(supply.amount() >= 0);
 
-    if(isInPast(supply.expirationDate()))
-        { throw invalid_argument("cannot add expired goods"); }
+//    if(isInPast(supply.expirationDate()))
+//        { throw invalid_argument("cannot add expired goods"); }
 
-    if(isInFuture(supply.manufacturingDate()))
-        { throw invalid_argument("manufacturing_date must be in the past");}
+//    if(isInFuture(supply.manufacturingDate()))
+//        { throw invalid_argument("manufacturing_date must be in the past");}
 
     supplies.emplace(supply);
-    total_amount_ += supply.setAmount(nullptr);
+//    total_amount_ += supply.setAmount(nullptr);
 }
 
 void GoodsShelf::removeSupplyExpiringSoonest()
@@ -66,7 +69,7 @@ void GoodsShelf::removeSupplyExpiringSoonest()
     supplies.pop();
 }
 
-const Date& GoodsShelf::nextExpirationDate() const
+const year_month_day& GoodsShelf::nextExpirationDate() const
 {
     return peekSupplyExpiringSoonest().expirationDate();
 }
@@ -76,7 +79,7 @@ void GoodsShelf::removeNGoodsExpiringSoonest(GoodsShelf::amount_t items)
     if(items <= 0)
         { throw invalid_argument("cannot remove less than 1 items"); }
     if(totalAmount() < items)
-        { throw Store::Lack(goods(), items); }
+        { throw Lack(goods(), items); }
 
     amount_t sum = 0;
 
@@ -103,11 +106,12 @@ void GoodsShelf::removeNGoodsExpiringSoonest(GoodsShelf::amount_t items)
 
 void GoodsShelf::modifySupplyExpiringSoonest(GoodsShelf::amount_t new_amount)
 {
+    // makes a copy
     Supply top_cp = peekSupplyExpiringSoonest();
 
     removeSupplyExpiringSoonest();
 
-    top_cp.setAmount(nullptr) = new_amount;
+    top_cp.setAmount(new_amount);
     addSupply(top_cp);
 }
 
@@ -115,7 +119,7 @@ const Supply& GoodsShelf::peekSupplyExpiringSoonest() const
 {
     return supplies.top();
 }
-
+//endregion
 
 std::ostream& operator<<(std::ostream& os, const GoodsShelf& supplies)
 {

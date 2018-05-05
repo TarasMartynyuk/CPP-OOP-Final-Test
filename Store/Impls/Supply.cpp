@@ -24,14 +24,8 @@ void Supply::setExpirationDate(const year_month_day& expiration_date)
 const Supply::amount_t& Supply::amount() const
     { return  amount_; }
 
-void& Supply::setAmount(const Supply::amount_t amount)
+void Supply::setAmount(const Supply::amount_t amount)
     { amount_ = amount; }
 //endregion
 
-struct Supply::ExpirationComparator
-{
-    bool operator()(const Supply& left, const Supply& right)
-    {
-        return left.expirationDate() > right.expirationDate();
-    }
-};
+

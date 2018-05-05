@@ -6,8 +6,6 @@
 #define OOPFINALEXAM_DISCOUNT_H
 
 
-#include "TimeDelta.h"
-
 class Discount
 {
 public:
