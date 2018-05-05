@@ -4,7 +4,6 @@
 #ifndef ARRAY_TEST_UTILS_H
 #define ARRAY_TEST_UTILS_H
 #include <string>
-#include "Date.h"
 
 const Date kInPast(2018, 3, 30);
 const Date kInFutureSooner(2019, 4, 30);

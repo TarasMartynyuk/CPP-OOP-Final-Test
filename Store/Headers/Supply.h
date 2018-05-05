@@ -3,35 +3,35 @@
 //
 #ifndef OOPFINALEXAM_SUPPLY_H
 #define OOPFINALEXAM_SUPPLY_H
-#include "Date.h"
+#include <cstddef>
+#include "tz.h"
+#include "GoodsSupply.h"
 
-// a supply of goods - a package that was "included" to a store
-// during some delivery
+// a class holding data about one-time delivery
+// can be used as a delivery of any good, depending on context
+// is used internally, in the GoodsSupplies class
 class Supply
 {
 public:
-    using amount_t = size_t;
+    using amount_t = GoodsSupply::amount_t;
     // sorts from supplies that will expire sooner
     // to those that will expire later
     struct ExpirationComparator;
 
-    Supply(size_t amount, const Date& date_manufactured,
-        const Date& date_expires);
-    Supply();
+    Supply(amount_t amount,
+        const date::local_days& date_expires);
+    Supply() = default;
 
-    Date& manufacturingDate();
-    const Date& manufacturingDate() const;
-    Date& expirationDate();
-    const Date& expirationDate() const;
+    const date::local_days& expirationDate() const;
+    void setExpirationDate(const date::local_days&);
 
-    amount_t& amount();
     const amount_t& amount() const;
 
+    void& setAmount(const amount_t amount);
 
 private:
-    Date date_manufactured_;
-    Date date_expires_;
-    size_t amount_;
+    amount_t amount_;
+    date::local_days expiration_date_;
 };
 
 struct Supply::ExpirationComparator

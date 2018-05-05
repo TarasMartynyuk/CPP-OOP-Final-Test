@@ -16,7 +16,7 @@ void Store::registerGoods(const Goods& gd, amount_t min_amount)
         { throw invalid_argument("goods already registered"); }
 
     goods_supplies_.insert(std::make_pair(
-        gd.id(), GoodsSupplies(gd, min_amount)));
+        gd.id(), GoodsShelf(gd, min_amount)));
 }
 
 void Store::include(const Goods& goods, const Supply& supply)
@@ -32,9 +32,9 @@ void Store::exclude(const Goods& gds, amount_t amount)
     if(! goodsRegistered(gds))
         { throw GoodsNotRegistered(gds); }
 
-    GoodsSupplies& supplies = goods_supplies_.at(gds.id());
+    GoodsShelf& supplies = goods_supplies_.at(gds.id());
 
-   // duplicating check for Lack here, but this way the impl of Store is independent from impl of GoodsSupplies
+   // duplicating check for Lack here, but this way the impl of Store is independent from impl of GoodsShelf
     if(! canExclude(gds, amount))
         { throw Lack(gds, amount); }
 
@@ -59,7 +59,7 @@ size_t Store::totalAmount(const Goods& goods) const
 
 bool Store::canExclude(
     const Goods& goods, Store::amount_t amount,
-    const GoodsSupplies& supplies)
+    const GoodsShelf& supplies)
 {
     return supplies.totalAmount() > amount &&
            supplies.totalAmount() - amount >= supplies.minAmount();
@@ -71,7 +71,7 @@ Store::Store()
 void Store::show()
 {
     cout << "store with goods : { ";
-    unordered_map<size_t, GoodsSupplies>::iterator it = goods_supplies_.begin();
+    unordered_map<size_t, GoodsShelf>::iterator it = goods_supplies_.begin();
 
     while(it != goods_supplies_.end())
     {

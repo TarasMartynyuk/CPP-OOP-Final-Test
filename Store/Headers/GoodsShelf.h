@@ -12,14 +12,14 @@
 
 // stores all the supplies of the goods type(all the packages that where given to the store)
 // along with shared information about that type(total values for all supplies)
-class GoodsSupplies
+class GoodsShelf
 {
 public:
     using amount_t = Supply::amount_t;
 
     // can create with amount less than specified min
-    GoodsSupplies(const Goods& gds, amount_t min_amount);
-    GoodsSupplies(const GoodsSupplies&);
+    GoodsShelf(const Goods& gds, amount_t min_amount);
+    GoodsShelf(const GoodsShelf&);
 
     // making this object mutable would require extra work
     // to achieve concistency, i ll leave it readonly for now
@@ -45,7 +45,7 @@ public:
 
 private:
     // no impl
-    void operator=(const GoodsSupplies&);
+    void operator=(const GoodsShelf&);
     const Goods goods_;
     amount_t total_amount_;
     amount_t min_amount_;
@@ -57,7 +57,7 @@ private:
     const Supply& peekSupplyExpiringSoonest() const;
 };
 
-std::ostream& operator<<(std::ostream& os, const GoodsSupplies & supplies);
+std::ostream& operator<<(std::ostream& os, const GoodsShelf & supplies);
 
 
 #endif //OOPFINALEXAM_GOODSINFO_H

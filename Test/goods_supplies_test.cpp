@@ -4,14 +4,14 @@
 #include <cassert>
 #include <stdexcept>
 #include "Store.h"
-#include "GoodsSupplies.h"
+#include "GoodsShelf.h"
 #include "goods_supplies_test.h"
 #include "test_utils.h"
 using namespace std;
 
 const size_t kMinAmount = 10;
 
-GoodsSupplies testInstance();
+GoodsShelf testInstance();
 
 void run_all_supplies_tests()
 {
@@ -68,7 +68,7 @@ void AddSupply_Throws_IfAddingManufacturedInFuture()
 
 void NextExpDate_IsLessThanNextDateAfterThisOne()
 {
-    GoodsSupplies gs = testInstance();
+    GoodsShelf gs = testInstance();
 
     gs.addSupply(Supply(5, kInPast, kInFutureLater));
     gs.addSupply(Supply(5, kInPast, kInFutureSooner));
@@ -83,7 +83,7 @@ void NextExpDate_IsLessThanNextDateAfterThisOne()
 
 void NextExpDate_ReturnsTheLeastDate_OfTheAddedSupplies()
 {
-    GoodsSupplies gs = testInstance();
+    GoodsShelf gs = testInstance();
 
     gs.addSupply(Supply(5, kInPast, kInFutureLater));
     gs.addSupply(Supply(5, kInPast, kInFutureSooner));
@@ -96,7 +96,7 @@ void NextExpDate_ReturnsTheLeastDate_OfTheAddedSupplies()
 
 void RemoveSupplyExpNext_ChangesAmount()
 {
-    GoodsSupplies gs = testInstance();
+    GoodsShelf gs = testInstance();
 
     gs.addSupply(Supply(5, kInPast, kInFutureLater));
     gs.addSupply(Supply(5, kInPast, kInFutureSooner));
@@ -113,7 +113,7 @@ void RemoveNGoods_ThrowsLack_IfNotEnoughItems()
 {
     expressionThrows<Store::Lack>([]()
     {
-        GoodsSupplies gs = testInstance();
+        GoodsShelf gs = testInstance();
 
         gs.addSupply(Supply(5, kInPast, kInFutureLater));
 
@@ -124,7 +124,7 @@ void RemoveNGoods_ThrowsLack_IfNotEnoughItems()
 
 void RemoveNGoods_ChangesTotalAmount()
 {
-    GoodsSupplies gs = testInstance();
+    GoodsShelf gs = testInstance();
 
     gs.addSupply(Supply(10, kInPast, kInFutureLater));
     Supply::amount_t old_amount = gs.totalAmount();
@@ -138,7 +138,7 @@ void RemoveNGoods_ChangesTotalAmount()
 
 void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods()
 {
-    GoodsSupplies gs = testInstance();
+    GoodsShelf gs = testInstance();
 
     gs.addSupply(Supply(10, kInPast, kInFutureLater));
     gs.addSupply(Supply(10, kInPast, kInFutureSooner));
@@ -155,8 +155,8 @@ void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods()
 
 //endregion
 
-GoodsSupplies testInstance()
+GoodsShelf testInstance()
 {
     Goods g(0, "test_goods", 0);
-    return GoodsSupplies(g, kMinAmount);
+    return GoodsShelf(g, kMinAmount);
 }

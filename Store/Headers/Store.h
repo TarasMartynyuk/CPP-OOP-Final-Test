@@ -6,17 +6,15 @@
 #include "CashRegister.h"
 #include "Goods.h"
 #include "unordered_map"
-#include "GoodsSupplies.h"
+#include "GoodsShelf.h"
 #include "PurchaseItem.h"
-
-class CashRegister;
 
 class Store
 {
 public:
     class Lack;
     class GoodsNotRegistered;
-    using amount_t = GoodsSupplies::amount_t;
+    using amount_t = GoodsShelf::amount_t;
 
     Store();
 
@@ -44,13 +42,12 @@ public:
 
 private:
     // id : goods info
-    std::unordered_map<size_t, GoodsSupplies> goods_supplies_;
-//    CashRegister cash_register_;
+    std::unordered_map<size_t, GoodsShelf> goods_supplies_;
 
-    // oh this may need to be in the GoodsSupplies class actually
+    // oh this may need to be in the GoodsShelf class actually
     static bool canExclude(
         const Goods& goods, amount_t amount,
-        const GoodsSupplies& supplies);
+        const GoodsShelf& supplies);
 };
 
 //region exceptions

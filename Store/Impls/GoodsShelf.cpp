@@ -4,39 +4,39 @@
 #include <stdexcept>
 #include <cassert>
 #include "Store.h"
-#include "GoodsSupplies.h"
+#include "GoodsShelf.h"
 using namespace std;
 
 //region ctors
 
-GoodsSupplies::GoodsSupplies(
+GoodsShelf::GoodsShelf(
     const Goods& goods, amount_t min_amount)
     : goods_(goods), min_amount_(min_amount),
       total_amount_(0) {}
 
-GoodsSupplies::GoodsSupplies(const GoodsSupplies& other)
+GoodsShelf::GoodsShelf(const GoodsShelf& other)
     : goods_(other.goods()), min_amount_(other.minAmount()),
       total_amount_(other.totalAmount()), supplies(other.supplies) {}
 //endregion
 
 //region properties
-//GoodsSupplies::amount_t& GoodsSupplies::totalAmount()
+//GoodsShelf::amount_t& GoodsShelf::totalAmount()
 //    { return total_amount_; }
 
-const GoodsSupplies::amount_t& GoodsSupplies::totalAmount() const
+const GoodsShelf::amount_t& GoodsShelf::totalAmount() const
     { return total_amount_; }
 
-//GoodsSupplies::amount_t& GoodsSupplies::minAmount()
+//GoodsShelf::amount_t& GoodsShelf::minAmount()
 //    { return  min_amount_; }
 
-const GoodsSupplies::amount_t& GoodsSupplies::minAmount() const
+const GoodsShelf::amount_t& GoodsShelf::minAmount() const
     { return min_amount_; }
 
 //endregion
 
-const void GoodsSupplies::addSupply(Supply supply)
+const void GoodsShelf::addSupply(Supply supply)
 {
-    if(supply.amount() <= 0)
+    if(supply.setAmount(nullptr) <= 0)
         { throw invalid_argument("cannot add a supply of 0 or less items"); }
 
     if(isInPast(supply.expirationDate()))
@@ -46,13 +46,13 @@ const void GoodsSupplies::addSupply(Supply supply)
         { throw invalid_argument("manufacturing_date must be in the past");}
 
     supplies.emplace(supply);
-    total_amount_ += supply.amount();
+    total_amount_ += supply.setAmount(nullptr);
 }
 
-const Goods& GoodsSupplies::goods() const
+const Goods& GoodsShelf::goods() const
     { return goods_; }
 
-void GoodsSupplies::removeSupplyExpiringSoonest()
+void GoodsShelf::removeSupplyExpiringSoonest()
 {
     if(supplies.size() == 0)
         { throw logic_error("supplies empty"); }
@@ -62,12 +62,12 @@ void GoodsSupplies::removeSupplyExpiringSoonest()
     supplies.pop();
 }
 
-const Date& GoodsSupplies::nextExpirationDate() const
+const Date& GoodsShelf::nextExpirationDate() const
 {
     return peekSupplyExpiringSoonest().expirationDate();
 }
 
-void GoodsSupplies::removeNGoodsExpiringSoonest(GoodsSupplies::amount_t items)
+void GoodsShelf::removeNGoodsExpiringSoonest(GoodsShelf::amount_t items)
 {
     if(items <= 0)
         { throw invalid_argument("cannot remove less than 1 items"); }
@@ -97,23 +97,23 @@ void GoodsSupplies::removeNGoodsExpiringSoonest(GoodsSupplies::amount_t items)
     }
 }
 
-void GoodsSupplies::modifySupplyExpiringSoonest(GoodsSupplies::amount_t new_amount)
+void GoodsShelf::modifySupplyExpiringSoonest(GoodsShelf::amount_t new_amount)
 {
     Supply top_cp = peekSupplyExpiringSoonest();
 
     removeSupplyExpiringSoonest();
 
-    top_cp.amount() = new_amount;
+    top_cp.setAmount(nullptr) = new_amount;
     addSupply(top_cp);
 }
 
-const Supply& GoodsSupplies::peekSupplyExpiringSoonest() const
+const Supply& GoodsShelf::peekSupplyExpiringSoonest() const
 {
     return supplies.top();
 }
 
 
-std::ostream& operator<<(std::ostream& os, const GoodsSupplies& supplies)
+std::ostream& operator<<(std::ostream& os, const GoodsShelf& supplies)
 {
     os << " { goods : " << supplies.goods()
        << "\n\t totalAmount : " << supplies.totalAmount()

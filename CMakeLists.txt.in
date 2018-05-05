@@ -1,0 +1,15 @@
+cmake_minimum_required(VERSION 2.8.2)
+
+project(dateh-download NONE)
+
+include(ExternalProject)
+ExternalProject_Add(dateh
+    GIT_REPOSITORY https://github.com/HowardHinnant/date.git
+    GIT_TAG master
+    SOURCE_DIR "${CMAKE_BINARY_DIR}/dateh-src"
+    BINARY_DIR "${CMAKE_BINARY_DIR}/dateh-build"
+    CONFIGURE_COMMAND ""
+    BUILD_COMMAND ""
+    INSTALL_COMMAND ""
+    TEST_COMMAND ""
+)
