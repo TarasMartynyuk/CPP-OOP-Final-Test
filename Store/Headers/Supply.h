@@ -22,8 +22,8 @@ public:
         const date::local_days& date_expires);
     Supply() = default;
 
-    const date::local_days& expirationDate() const;
-    void setExpirationDate(const date::local_days&);
+    const date::year_month_day& expirationDate() const;
+    void setExpirationDate(const date::year_month_day& expiration_date);
 
     const amount_t& amount() const;
 
@@ -31,15 +31,7 @@ public:
 
 private:
     amount_t amount_;
-    date::local_days expiration_date_;
-};
-
-struct Supply::ExpirationComparator
-{
-    bool operator()(const Supply& left, const Supply& right)
-    {
-        return left.expirationDate() > right.expirationDate();
-    }
+    date::year_month_day expiration_date_;
 };
 
 #endif //OOPFINALEXAM_SUPPLY_H

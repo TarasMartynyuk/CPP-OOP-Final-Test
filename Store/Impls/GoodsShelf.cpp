@@ -6,6 +6,7 @@
 #include "Store.h"
 #include "GoodsShelf.h"
 using namespace std;
+using namespace date;
 
 //region ctors
 
@@ -20,21 +21,27 @@ GoodsShelf::GoodsShelf(const GoodsShelf& other)
 //endregion
 
 //region properties
-//GoodsShelf::amount_t& GoodsShelf::totalAmount()
-//    { return total_amount_; }
+const Goods& GoodsShelf::goods() const
+    { return goods_; }
 
-const GoodsShelf::amount_t& GoodsShelf::totalAmount() const
+const GoodsShelf::amount_t GoodsShelf::totalAmount() const
     { return total_amount_; }
 
-//GoodsShelf::amount_t& GoodsShelf::minAmount()
-//    { return  min_amount_; }
-
-const GoodsShelf::amount_t& GoodsShelf::minAmount() const
+const GoodsShelf::amount_t GoodsShelf::minAmount() const
     { return min_amount_; }
+
+void GoodsShelf::setMinAmount(
+    GoodsShelf::amount_t min_amount)
+{
+    if(min_amount < 0)
+        { throw invalid_argument("min amount cannot be less than 0"); }
+
+    min_amount_ = min_amount;
+}
 
 //endregion
 
-const void GoodsShelf::addSupply(Supply supply)
+void GoodsShelf::addSupply(Supply supply)
 {
     if(supply.setAmount(nullptr) <= 0)
         { throw invalid_argument("cannot add a supply of 0 or less items"); }
@@ -48,9 +55,6 @@ const void GoodsShelf::addSupply(Supply supply)
     supplies.emplace(supply);
     total_amount_ += supply.setAmount(nullptr);
 }
-
-const Goods& GoodsShelf::goods() const
-    { return goods_; }
 
 void GoodsShelf::removeSupplyExpiringSoonest()
 {

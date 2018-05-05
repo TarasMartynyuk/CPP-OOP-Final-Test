@@ -21,15 +21,18 @@ public:
     GoodsShelf(const Goods& gds, amount_t min_amount);
     GoodsShelf(const GoodsShelf&);
 
-    // making this object mutable would require extra work
-    // to achieve concistency, i ll leave it readonly for now
-    const Goods& goods() const;
-//    amount_t& totalAmount();
-    const amount_t& totalAmount() const;
-//    amount_t& minAmount();
-    const amount_t& minAmount() const;
+    //region props
 
-    const void addSupply(Supply supply);
+    // making this object mutable would require extra work
+    // to achieve consistency, i ll leave it readonly for now
+    const Goods& goods() const;
+    const amount_t totalAmount() const;
+    const amount_t minAmount() const;
+
+    void setMinAmount(amount_t min_amount);
+    //endregion
+
+    void addSupply(Supply supply);
 
     // they can be in multiple subsequent supplies
     // throws if removing would render the amount
@@ -37,19 +40,22 @@ public:
     void removeNGoodsExpiringSoonest(amount_t items);
 
     // the date of the expiration of the next supply
-    const Date& nextExpirationDate() const;
+    const date::local_days& nextExpirationDate() const;
 
     // throws away the whole supply that would expire soonest
     // (or maybe have expired already)
     void removeSupplyExpiringSoonest();
 
-private:
     // no impl
-    void operator=(const GoodsShelf&);
+    void operator=(const GoodsShelf&) = delete;
+
+private:
+
     const Goods goods_;
     amount_t total_amount_;
     amount_t min_amount_;
 
+    // top element expires soonest
     std::priority_queue<Supply, std::vector<Supply>,
         Supply::ExpirationComparator> supplies;
 

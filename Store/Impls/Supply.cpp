@@ -10,11 +10,12 @@ Supply::Supply(
     : expiration_date_(expiration_date),
     amount_(amount) {}
 
+//region props
 
-const local_days& Supply::expirationDate() const
+const date::year_month_day& Supply::expirationDate() const
     { return expiration_date_; }
 
-void Supply::setExpirationDate(const date::local_days& expiration_date)
+void Supply::setExpirationDate(const year_month_day& expiration_date)
 {
     //TODO: validate
     expiration_date_ = expiration_date;
@@ -25,3 +26,12 @@ const Supply::amount_t& Supply::amount() const
 
 void& Supply::setAmount(const Supply::amount_t amount)
     { amount_ = amount; }
+//endregion
+
+struct Supply::ExpirationComparator
+{
+    bool operator()(const Supply& left, const Supply& right)
+    {
+        return left.expirationDate() > right.expirationDate();
+    }
+};

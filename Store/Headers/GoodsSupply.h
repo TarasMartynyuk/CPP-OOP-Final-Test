@@ -16,17 +16,17 @@ public:
 
     GoodsSupply(const date::local_days& date_manufactured, const Goods& goods, int amount);
 
-    const date::local_days& dateManufactured() const;
-    void setDateManufactured(const date::local_days& date_manufactured);
-
     const Goods& goods() const;
     void& setGoods(const Goods& goods);
+
+    const date::year_month_day& dateManufactured() const;
+    void setDateManufactured(const date::year_month_day& date_manufactured);
 
     amount_t amount() const;
     void setAmount(amount_t amount);
 
 private:
-    date::local_days date_manufactured_;
+    date::year_month_day date_manufactured_;
     Goods goods_;
     amount_t amount_;
 };

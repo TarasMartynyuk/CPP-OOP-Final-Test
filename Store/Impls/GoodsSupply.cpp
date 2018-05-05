@@ -13,10 +13,10 @@ GoodsSupply::GoodsSupply(
     goods_(goods),
     amount_(amount) {}
 
-const local_days& GoodsSupply::dateManufactured() const
+const year_month_day& GoodsSupply::dateManufactured() const
     { return date_manufactured_; }
 
-void GoodsSupply::setDateManufactured(const local_days& date_manufactured)
+void GoodsSupply::setDateManufactured(const year_month_day& date_manufactured)
     { date_manufactured_ = date_manufactured; }
 
 const Goods& GoodsSupply::goods() const
