@@ -19,8 +19,8 @@ public:
     struct ExpirationComparator;
 
     Supply(amount_t amount,
-        const date::local_days& date_expires);
-    Supply() = default;
+        const date::year_month_day& date_expires);
+    Supply();
 
     const date::year_month_day& expirationDate() const;
     void setExpirationDate(const date::year_month_day& expiration_date);

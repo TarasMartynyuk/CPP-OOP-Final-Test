@@ -2,14 +2,17 @@
 // Created by Taras Martynyuk on 5/1/2018.
 //
 #include "Supply.h"
+#include "date_utils.h"
 using namespace date;
 
 Supply::Supply(
     Supply::amount_t amount,
-    const date::local_days& expiration_date)
+    const year_month_day& expiration_date)
     : expiration_date_(expiration_date),
     amount_(amount) {}
 
+Supply::Supply()
+    : Supply(0, kDefaultDate) {}
 //region props
 
 const date::year_month_day& Supply::expirationDate() const

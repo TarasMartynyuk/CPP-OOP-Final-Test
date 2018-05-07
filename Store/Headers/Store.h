@@ -14,7 +14,7 @@ class Store
 public:
     using amount_t = GoodsShelf::amount_t;
 
-    Store() = default;
+    Store();
 
     void show() const;
 

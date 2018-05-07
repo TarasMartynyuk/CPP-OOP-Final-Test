@@ -22,7 +22,6 @@ add_subdirectory("${CMAKE_BINARY_DIR}/dateh-src" "${CMAKE_BINARY_DIR}/dateh-buil
 
 file(GLOB_RECURSE store_src ./Store/*.h ./Store/*.cpp)
 
-#include_directories(Test/Headers)
 add_executable(OOPFinalExam ${store_src} main.cpp)
 
 # Include headers dir to enable intellisence

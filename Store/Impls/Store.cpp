@@ -6,6 +6,9 @@
 #include "Discounter.h"
 using  namespace std;
 
+
+Store::Store() {}
+
 bool Store::goodsRegistered(const Goods& good) const
 {
     return goods_supplies_.count(good.id()) == 1;
@@ -80,6 +83,7 @@ void Store::show() const
     }
     cout << "}";
 }
+
 
 
 

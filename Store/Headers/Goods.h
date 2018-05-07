@@ -12,10 +12,7 @@ class Goods
 public:
     Goods(size_t id, std::string name, size_t price_per_item);
 //    Goods() = default;
-    Goods()
-{
-    std::cout << "ctor";
-}
+    Goods();
 
     size_t& id();
     const size_t& id() const;

@@ -14,8 +14,10 @@ class GoodsSupply
 public:
     using amount_t = int;
 
-    GoodsSupply(const date::local_days& date_manufactured, const Goods& goods, int amount);
-    GoodsSupply() = default;
+    GoodsSupply(const date::year_month_day& date_manufactured,
+        const Goods& goods,
+        int amount);
+    GoodsSupply();
 
     const Goods& goods() const;
     void setGoods(const Goods& goods);
