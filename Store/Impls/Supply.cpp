@@ -29,6 +29,7 @@ const Supply::amount_t& Supply::amount() const
 
 void Supply::setAmount(const Supply::amount_t amount)
     { amount_ = amount; }
+
 //endregion
 
 

@@ -26,7 +26,7 @@ public:
 //    void makePurchase(std::vector<PurchaseItem>);
 
     // throws if g is not registered
-    void include(const Goods& goods, const Supply& supply);
+    void include(const GoodsSupply&);
 
     // throws Lack exception if there is less than minimum amount
     // of goods at the store
@@ -36,7 +36,7 @@ public:
     // true if the store can give amount items of type g
     // throws if g is not registered
     bool canExclude(const Goods& goods, amount_t amount) const;
-    size_t totalAmount(const Goods&) const;
+    amount_t totalAmount(const Goods& goods) const;
 
 private:
     // id : goods info

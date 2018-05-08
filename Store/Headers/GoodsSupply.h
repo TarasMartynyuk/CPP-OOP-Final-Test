@@ -14,9 +14,10 @@ class GoodsSupply
 public:
     using amount_t = int;
 
-    GoodsSupply(const date::year_month_day& date_manufactured,
+    GoodsSupply(
         const Goods& goods,
-        int amount);
+        int amount,
+        const date::year_month_day& date_manufactured);
     GoodsSupply();
 
     const Goods& goods() const;

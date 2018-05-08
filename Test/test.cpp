@@ -3,8 +3,7 @@
 //
 #include "test_utils.h"
 #include "test.h"
-#include "goods_supplies_test.h"
-#include "date_test.h"
+#include "goods_shelf_test.h"
 #include "store_test.h"
 #include <iostream>
 
@@ -17,3 +16,18 @@ void run_all_tests()
 
     logAllPassed();
 }
+
+
+//#include "date_utils.h"
+//#include "date.h"
+//using namespace date;
+//void ToLocDays_ConvertedToFrom_EqOriginal()
+//{
+//    year_month_day orig = kInPast;
+//
+//    auto loc_days = toLocalDays(orig);
+//
+//    year_month_day there_and_back_again(loc_days);
+//
+//    assert(there_and_back_again == orig);
+//}

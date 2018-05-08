@@ -34,7 +34,6 @@ public:
 private:
     amount_t amount_;
     date::year_month_day expiration_date_;
-
 };
 
 

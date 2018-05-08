@@ -4,10 +4,12 @@
 #ifndef ARRAY_TEST_UTILS_H
 #define ARRAY_TEST_UTILS_H
 #include <string>
+#include "date.h"
+using namespace date;
 
-const Date kInPast(2018, 3, 30);
-const Date kInFutureSooner(2019, 4, 30);
-const Date kInFutureLater(2019, 5, 4);
+constexpr date::year_month_day kInPast  = 2018_y/March/30;
+constexpr date::year_month_day  kInFutureSooner = 2019_y/April/30;
+constexpr date::year_month_day  kInFutureLater = 2019_y/May/4;
 
 template <typename TException>
 bool expressionThrows( void (*const expression)())

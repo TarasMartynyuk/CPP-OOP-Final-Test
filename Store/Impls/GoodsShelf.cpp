@@ -3,6 +3,7 @@
 //
 #include <stdexcept>
 #include <cassert>
+#include "date_utils.h"
 #include "StoreExceptions.h"
 #include "GoodsShelf.h"
 using namespace std;
@@ -47,21 +48,19 @@ void GoodsShelf::setMinAmount(
 void GoodsShelf::addSupply(Supply supply)
 {
     // it is handled in ctor, so we are asserting, not checking
-    assert(supply.amount() >= 0);
+    if(supply.amount() <= 0)
+        { throw invalid_argument("cannot add less than 1 items"); }
 
-//    if(isInPast(supply.expirationDate()))
-//        { throw invalid_argument("cannot add expired goods"); }
-
-//    if(isInFuture(supply.manufacturingDate()))
-//        { throw invalid_argument("manufacturing_date must be in the past");}
+    if(isInPast(supply.expirationDate()))
+        { throw invalid_argument("cannot add expired goods"); }
 
     supplies.emplace(supply);
-//    total_amount_ += supply.setAmount(nullptr);
+    total_amount_ += supply.amount();
 }
 
 void GoodsShelf::removeSupplyExpiringSoonest()
 {
-    if(supplies.size() == 0)
+    if(supplies.empty())
         { throw logic_error("supplies empty"); }
 
     assert(totalAmount() >= supplies.top().amount());
@@ -100,7 +99,7 @@ void GoodsShelf::removeNGoodsExpiringSoonest(GoodsShelf::amount_t items)
             if(sum == items)
                 { return; }
         }
-        assert(supplies.size() != 0);
+        assert(! supplies.empty());
     }
 }
 

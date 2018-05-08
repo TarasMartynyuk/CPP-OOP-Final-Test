@@ -5,26 +5,36 @@
 #define OOPFINALEXAM_GOODS_H
 #include <string>
 #include <iostream>
+#include "date.h"
 
 // data to identify goods
 class Goods
 {
 public:
-    Goods(size_t id, std::string name, size_t price_per_item);
-//    Goods() = default;
+    Goods(size_t id,
+        std::string name,
+        size_t price_per_item,
+        size_t freshness_period);
     Goods();
 
+    //should pass by value
     size_t& id();
     const size_t& id() const;
+
     std::string& name();
     const std::string& name() const;
+
     size_t& pricePerItem();
     const size_t& pricePerItem() const;
+
+    date::days freshnessPeriod() const;
+    void setFreshnessPeriod(date::days);
 
 private:
     size_t id_;
     size_t price_per_item_;
     std::string name_;
+    date::days freshness_period_;
 };
 
 std::ostream& operator<<(std::ostream& os, const Goods & date);

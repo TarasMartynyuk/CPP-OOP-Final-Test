@@ -7,12 +7,12 @@ using namespace std::chrono;
 using namespace date;
 
 GoodsSupply::GoodsSupply(
-    const year_month_day& date_manufactured,
     const Goods& goods,
-    int amount) :
-    date_manufactured_(date_manufactured),
-    goods_(goods),
-    amount_(amount) {}
+    int amount,
+    const year_month_day& date_manufactured)
+    : date_manufactured_(date_manufactured),
+        goods_(goods),
+        amount_(amount) {}
 
 
 GoodsSupply::GoodsSupply()

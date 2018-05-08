@@ -3,13 +3,16 @@
 //
 #include <cassert>
 #include <stdexcept>
+#include <Store/Headers/StoreExceptions.h>
 #include "Store.h"
 #include "GoodsShelf.h"
-#include "goods_supplies_test.h"
+#include "goods_shelf_test.h"
 #include "test_utils.h"
+#include "date.h"
+#include "date_utils.h"
 using namespace std;
-
-const size_t kMinAmount = 10;
+using namespace date;
+using amount_t_sh = GoodsShelf::amount_t;
 
 GoodsShelf testInstance();
 
@@ -17,7 +20,6 @@ void run_all_supplies_tests()
 {
     AddSupply_ChangesTotalAmount();
     AddSupply_Throws_IfAddingExpired();
-    AddSupply_Throws_IfAddingManufacturedInFuture();
 
     NextExpDate_IsLessThanNextDateAfterThisOne();
     NextExpDate_ReturnsTheLeastDate_OfTheAddedSupplies();
@@ -35,9 +37,9 @@ void AddSupply_ChangesTotalAmount()
 {
     auto supplies = testInstance();
 
-    size_t old_total = supplies.totalAmount();
+    amount_t_sh old_total = supplies.totalAmount();
 
-    supplies.addSupply(Supply(20, kInPast, kInFutureSooner));
+    supplies.addSupply(Supply(20, kInFutureSooner));
 
     assert(supplies.totalAmount() == old_total + 20);
     logPassed(__FUNCTION__);
@@ -48,17 +50,7 @@ void AddSupply_Throws_IfAddingExpired()
     assert(expressionThrows<invalid_argument>([]() -> void
     {
         auto supplies = testInstance();
-        supplies.addSupply(Supply(20, kInPast, kInPast));
-    }));
-    logPassed(__FUNCTION__);
-}
-
-void AddSupply_Throws_IfAddingManufacturedInFuture()
-{
-    assert(expressionThrows<invalid_argument>([]() -> void
-    {
-        auto supplies = testInstance();
-        supplies.addSupply(Supply(20, kInFutureSooner, kInFutureSooner));
+        supplies.addSupply(Supply(20, kInPast));
     }));
     logPassed(__FUNCTION__);
 }
@@ -70,13 +62,13 @@ void NextExpDate_IsLessThanNextDateAfterThisOne()
 {
     GoodsShelf gs = testInstance();
 
-    gs.addSupply(Supply(5, kInPast, kInFutureLater));
-    gs.addSupply(Supply(5, kInPast, kInFutureSooner));
+    gs.addSupply(Supply(5, kInFutureLater));
+    gs.addSupply(Supply(5, kInFutureSooner));
 
-    Date front = gs.nextExpirationDate();
+    year_month_day front = gs.nextExpirationDate();
     gs.removeSupplyExpiringSoonest();
 
-    Date second_front = gs.nextExpirationDate();
+    year_month_day second_front = gs.nextExpirationDate();
     assert(front < second_front);
     logPassed(__FUNCTION__);
 }
@@ -85,10 +77,11 @@ void NextExpDate_ReturnsTheLeastDate_OfTheAddedSupplies()
 {
     GoodsShelf gs = testInstance();
 
-    gs.addSupply(Supply(5, kInPast, kInFutureLater));
-    gs.addSupply(Supply(5, kInPast, kInFutureSooner));
-    gs.addSupply(Supply(5, kInPast,
-        Date::fromTimestamp(kInFutureSooner.timestamp() + 10000)));
+    gs.addSupply(Supply(5, kInFutureLater));
+    gs.addSupply(Supply(5, kInFutureSooner));
+
+    gs.addSupply(Supply(
+        5, kInFutureLater + months(1)));
 
     assert(gs.nextExpirationDate() == kInFutureSooner);
     logPassed(__FUNCTION__);
@@ -98,8 +91,8 @@ void RemoveSupplyExpNext_ChangesAmount()
 {
     GoodsShelf gs = testInstance();
 
-    gs.addSupply(Supply(5, kInPast, kInFutureLater));
-    gs.addSupply(Supply(5, kInPast, kInFutureSooner));
+    gs.addSupply(Supply(5, kInFutureLater));
+    gs.addSupply(Supply(5, kInFutureSooner));
 
     Supply::amount_t old_amount = gs.totalAmount();
 
@@ -111,11 +104,11 @@ void RemoveSupplyExpNext_ChangesAmount()
 
 void RemoveNGoods_ThrowsLack_IfNotEnoughItems()
 {
-    expressionThrows<Store::Lack>([]()
+    expressionThrows<Lack>([]()
     {
         GoodsShelf gs = testInstance();
 
-        gs.addSupply(Supply(5, kInPast, kInFutureLater));
+        gs.addSupply(Supply(5, kInFutureLater));
 
         gs.removeNGoodsExpiringSoonest(10);
     });
@@ -126,9 +119,8 @@ void RemoveNGoods_ChangesTotalAmount()
 {
     GoodsShelf gs = testInstance();
 
-    gs.addSupply(Supply(10, kInPast, kInFutureLater));
+    gs.addSupply(Supply(10, kInFutureLater));
     Supply::amount_t old_amount = gs.totalAmount();
-
 
     gs.removeNGoodsExpiringSoonest(10);
 
@@ -140,15 +132,14 @@ void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods()
 {
     GoodsShelf gs = testInstance();
 
-    gs.addSupply(Supply(10, kInPast, kInFutureLater));
-    gs.addSupply(Supply(10, kInPast, kInFutureSooner));
+    gs.addSupply(Supply(10, kInFutureLater));
+    gs.addSupply(Supply(10, kInFutureSooner));
 
-
-    Date  old_next = gs.nextExpirationDate();
+    year_month_day old_next = gs.nextExpirationDate();
 
     gs.removeNGoodsExpiringSoonest(5);
 
-    Date new_next = gs.nextExpirationDate();
+    year_month_day new_next = gs.nextExpirationDate();
     assert(old_next == new_next);
     logPassed(__FUNCTION__);
 }
@@ -157,6 +148,7 @@ void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods()
 
 GoodsShelf testInstance()
 {
-    Goods g(0, "test_goods", 0);
+    const amount_t_sh kMinAmount = 10;
+    Goods g(0, "test_goods", 0, 50);
     return GoodsShelf(g, kMinAmount);
 }

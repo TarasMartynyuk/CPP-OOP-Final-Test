@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.5)
 project(OOPFinalExam)
 
 set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_FLAGS "-std=c++11")
+set(CMAKE_CXX_FLAGS "-std=c++11 -std=gnu++11 -fext-numeric-literals")
 message(${CMAKE_CXX_FLAGS})
 
 set({CMAKE_BINARY_DIR} cmake-build-debug)
@@ -21,11 +21,13 @@ execute_process(COMMAND "${CMAKE_COMMAND}" --build .
 add_subdirectory("${CMAKE_BINARY_DIR}/dateh-src" "${CMAKE_BINARY_DIR}/dateh-build")
 
 file(GLOB_RECURSE store_src ./Store/*.h ./Store/*.cpp)
+file(GLOB_RECURSE test_src ./Test/*.h ./Test/*.cpp)
 
-add_executable(OOPFinalExam ${store_src} main.cpp)
+add_executable(OOPFinalExam ${store_src} ${test_src} main.cpp)
 
 # Include headers dir to enable intellisence
 target_include_directories(OOPFinalExam PRIVATE . Store/Headers Store/Purchasing)
+target_include_directories(OOPFinalExam PRIVATE . Test/Headers)
 target_include_directories(OOPFinalExam PRIVATE "${CMAKE_BINARY_DIR}/dateh-src/include/date")
 
 target_link_libraries(OOPFinalExam tz)

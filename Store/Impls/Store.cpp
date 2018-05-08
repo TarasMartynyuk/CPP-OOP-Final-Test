@@ -1,7 +1,8 @@
 //
 // Created by Taras Martynyuk on 5/1/2018.
 //
-#include <Store/Headers/StoreExceptions.h>
+#include "StoreExceptions.h"
+#include "date_utils.h"
 #include "Store.h"
 #include "Discounter.h"
 using  namespace std;
@@ -23,12 +24,19 @@ void Store::registerGoods(const Goods& gd, amount_t min_amount)
         gd.id(), GoodsShelf(gd, min_amount)));
 }
 
-void Store::include(const Goods& goods, const Supply& supply)
+void Store::include(const GoodsSupply& g_supply)
 {
-    if(! goodsRegistered(goods))
-        { throw GoodsNotRegistered(goods); }
+    if(! goodsRegistered(g_supply.goods()))
+        { throw GoodsNotRegistered(g_supply.goods()); }
 
-    goods_supplies_.at(goods.id()).addSupply(supply);
+    if(isInFuture(g_supply.dateManufactured()))
+        { throw invalid_argument("manufacturing_date must be in the past");}
+
+    auto exp_date = addDays(g_supply.dateManufactured(),
+        g_supply.goods().freshnessPeriod());
+
+    goods_supplies_.at(g_supply.goods().id()).addSupply(
+        Supply(g_supply.amount(), exp_date));
 }
 
 void Store::exclude(const Goods& gds, amount_t amount)
@@ -53,7 +61,7 @@ bool Store::canExclude(const Goods& goods, amount_t amount) const
     return canExclude(goods, amount, goods_supplies_.at(goods.id()));
 }
 
-size_t Store::totalAmount(const Goods& goods) const
+Store::amount_t Store::totalAmount(const Goods& goods) const
 {
     if(! goodsRegistered(goods))
         { throw GoodsNotRegistered(goods); }
