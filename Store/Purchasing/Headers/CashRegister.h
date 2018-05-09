@@ -4,16 +4,17 @@
 #ifndef OOPFINALEXAM_CASHREGISTER_H
 #define OOPFINALEXAM_CASHREGISTER_H
 #include "Store.h"
-#include "PurchaseItem.h"
 #include <iostream>
 #include <vector>
+#include <unordered_map>
 
 class Store;
 
 class CashRegister
 {
 public:
-    CashRegister(const Store&);
+    using amount_t = Store::amount_t;
+//    CashRegister(const Store&);
 
     const int& cash() const;
     int& cash();
@@ -22,11 +23,11 @@ public:
     // and adds cash
     // items get discount if their expiration dates are soon
     // throws if not enough items
-    void makePurchase(std::vector<PurchaseItem> purchase);
+    void makePurchase(std::unordered_map<Goods, amount_t> purch);
 
 private:
     int cash_;
-    const Store& store_;
+//    const Store& store_;
 };
 
 

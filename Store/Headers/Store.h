@@ -3,11 +3,9 @@
 //
 #ifndef OOPFINALEXAM_STORE_H
 #define OOPFINALEXAM_STORE_H
-#include "CashRegister.h"
 #include "Goods.h"
 #include "unordered_map"
 #include "GoodsShelf.h"
-#include "PurchaseItem.h"
 
 class Store
 {
@@ -21,9 +19,9 @@ public:
     void registerGoods(const Goods&, amount_t min_amount);
     bool goodsRegistered(const Goods&) const;
 
-    // takes the purchase items without discounts
-    // and trades items for cash
-//    void makePurchase(std::vector<PurchaseItem>);
+    // trades items for cash, adding sum of purch to store cash
+    // and excluding necessary amount of items
+    void makePurchase(std::unordered_map<Goods, amount_t> purch);
 
     // throws if g is not registered
     void include(const GoodsSupply&);

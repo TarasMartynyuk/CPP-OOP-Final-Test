@@ -6,13 +6,12 @@
 
 #include <vector>
 #include "Supply.h"
-#include "PurchaseItem.h"
 
 class Discounter
 {
 public:
-    static std::vector<PurchaseItem> applyDiscountsIfNeeded(
-        std::vector<Supply>);
+//    static std::vector<PurchaseItem> applyDiscountsIfNeeded(
+//        std::vector<Supply>);
 
 private:
     // discount : min time left to expire to be granted this discount

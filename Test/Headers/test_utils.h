@@ -8,6 +8,8 @@
 using namespace date;
 
 constexpr date::year_month_day kInPast  = 2018_y/March/30;
+constexpr date::year_month_day kInPastLater  = 2018_y/March/11;
+
 constexpr date::year_month_day  kInFutureSooner = 2019_y/April/30;
 constexpr date::year_month_day  kInFutureLater = 2019_y/May/4;
 

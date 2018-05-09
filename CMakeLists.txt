@@ -26,7 +26,7 @@ file(GLOB_RECURSE test_src ./Test/*.h ./Test/*.cpp)
 add_executable(OOPFinalExam ${store_src} ${test_src} main.cpp)
 
 # Include headers dir to enable intellisence
-target_include_directories(OOPFinalExam PRIVATE . Store/Headers Store/Purchasing)
+target_include_directories(OOPFinalExam PRIVATE . Store/Headers Store/Purchasing/Headers)
 target_include_directories(OOPFinalExam PRIVATE . Test/Headers)
 target_include_directories(OOPFinalExam PRIVATE "${CMAKE_BINARY_DIR}/dateh-src/include/date")
 

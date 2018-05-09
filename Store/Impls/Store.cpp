@@ -95,11 +95,3 @@ void Store::show() const
 
 
 
-//void Store::makePurchase(std::vector<PurchaseItem>)
-//{
-//    // get this from removeNGoodsExpiringSoonest - needs refactoring
-//    vector<Supply> supplies_to_rem;
-//    cash_register_.makePurchase(Discounter::applyDiscountsIfNeeded(supplies_to_rem));
-//}
-
-
