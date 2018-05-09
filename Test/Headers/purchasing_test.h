@@ -8,9 +8,9 @@ void run_all_purch_tests();
 
 void ThrowsLack_IfPurchAmount_GraterThanStoreHas();
 void ThrowsLack_IfMoreItemsOfGoodsInPurch_ThanStoreHas();
-void ChangesItemsAmount_ByPurchaseAmount();
+void ChangesShelvesTotalAmount_ByPurchaseAmount();
 void AddsPurchSum_ToCash();
 // TODO: test that the amount is changed correctly
-// separately for each good in purch
+// separately for each goods in purch
 
 #endif //OOPFINALEXAM_PURCHASING_TEST_H

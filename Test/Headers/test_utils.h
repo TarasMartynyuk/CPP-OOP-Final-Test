@@ -22,14 +22,11 @@ bool expressionThrows( std::function<void()> expression)
         return false;
     }
     catch(TException& e)
-    {
-        return true;
-    }
+        { return true; }
 }
 
 void logPassed(std::string testName);
 void logAllPassed();
-
 
 
 #endif //ARRAY_TEST_UTILS_H

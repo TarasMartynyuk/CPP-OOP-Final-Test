@@ -9,8 +9,6 @@
 using namespace std;
 //region defs
 
-Store testStore();
-
 using amount_c = CashRegister::amount_t;
 static const Goods nice_goods(0, "nice goods", 13, 4);
 static const Goods soso_goods(1, "so-so goods", 6, 25);
@@ -19,11 +17,14 @@ static const amount_c kNiceAmount = 4;
 static const amount_c kSosoAmount = 7;
 
 using Purch = unordered_map<size_t, amount_c>;
+
+Store testStore();
 //endregion
 
 void run_all_purch_tests()
 {
     ThrowsLack_IfPurchAmount_GraterThanStoreHas();
+    ThrowsLack_IfMoreItemsOfGoodsInPurch_ThanStoreHas();
 }
 
 void ThrowsLack_IfPurchAmount_GraterThanStoreHas()
@@ -31,14 +32,47 @@ void ThrowsLack_IfPurchAmount_GraterThanStoreHas()
     Store st = testStore();
 
     Purch purch
-        {
-            { nice_goods.id(), kNiceAmount },
-            { soso_goods.id(), kSosoAmount + 1 }
-        };
+    {
+        { nice_goods.id(), kNiceAmount + kSosoAmount + 5 },
+    };
 
     assert(expressionThrows<invalid_argument>([&](){
         st.makePurchase(purch);
     }));
+    logPassed(__FUNCTION__);
+}
+
+void ThrowsLack_IfMoreItemsOfGoodsInPurch_ThanStoreHas()
+{
+    Store st = testStore();
+
+    Purch purch
+    {
+        { nice_goods.id(), kNiceAmount },
+        { soso_goods.id(), kSosoAmount + 1 }
+    };
+
+    assert(expressionThrows<invalid_argument>([&](){
+        st.makePurchase(purch);
+    }));
+    logPassed(__FUNCTION__);
+}
+
+void ChangesShelvesTotalAmount_ByPurchaseAmount()
+{
+    Store st = testStore();
+
+    Purch purch
+    {
+        { nice_goods.id(), kNiceAmount },
+        { soso_goods.id(), kSosoAmount + 1 }
+    };
+    amount_c purch_amount = kNiceAmount + kSosoAmount + 1;
+    amount_c orig_amount = st.totalAmount();
+
+    st.makePurchase(purch);
+
+    assert(st.totalAmount() == orig_amount + purch_amount);
     logPassed(__FUNCTION__);
 }
 

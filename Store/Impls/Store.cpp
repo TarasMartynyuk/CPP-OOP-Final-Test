@@ -8,12 +8,19 @@
 using  namespace std;
 
 Store::Store()
-    : goods_supplies_(),
-        cash_register_(goods_supplies_) {}
+    : shelves_(),
+        cash_register_(new CashRegister(*this)) {}
+
+//region registering
 
 bool Store::goodsRegistered(const Goods& good) const
 {
-    return goods_supplies_.count(good.id()) == 1;
+    return goodsRegistered(good.id());
+}
+
+bool Store::goodsRegistered(const size_t& goods_id) const
+{
+    return shelves_.count(goods_id) == 1;
 }
 
 void Store::registerGoods(const Goods& gd, amount_t min_amount)
@@ -21,9 +28,10 @@ void Store::registerGoods(const Goods& gd, amount_t min_amount)
     if(goodsRegistered(gd))
         { throw invalid_argument("goods already registered"); }
 
-    goods_supplies_.insert(std::make_pair(
+    shelves_.insert(std::make_pair(
         gd.id(), GoodsShelf(gd, min_amount)));
 }
+//endregion
 
 void Store::include(const GoodsSupply& g_supply)
 {
@@ -36,7 +44,7 @@ void Store::include(const GoodsSupply& g_supply)
     auto exp_date = addDays(g_supply.dateManufactured(),
         g_supply.goods().freshnessPeriod());
 
-    goods_supplies_.at(g_supply.goods().id()).addSupply(
+    shelves_.at(g_supply.goods().id()).addSupply(
         Supply(g_supply.amount(), exp_date));
 }
 
@@ -45,7 +53,7 @@ void Store::exclude(const Goods& gds, amount_t amount)
     if(! goodsRegistered(gds))
         { throw GoodsNotRegistered(gds); }
 
-    GoodsShelf& supplies = goods_supplies_.at(gds.id());
+    GoodsShelf& supplies = shelves_.at(gds.id());
 
    // duplicating check for Lack here, but this way the impl of Store is independent from impl of GoodsShelf
     if(! canExclude(gds, amount))
@@ -56,16 +64,21 @@ void Store::exclude(const Goods& gds, amount_t amount)
 
 bool Store::canExclude(const Goods& goods, amount_t amount) const
 {
-    if(! goodsRegistered(goods))
-        { throw GoodsNotRegistered(goods); }
+    return canExclude(goods.id(), amount);
+}
 
-    return goods_supplies_.at(goods.id()).
+bool Store::canExclude(size_t goods_id, Store::amount_t amount) const
+{
+    if(! goodsRegistered(goods_id))
+        { throw GoodsNotRegistered(goods_id); }
+    
+    return shelves_.at(goods_id).
         hasEnough(amount);
 }
 
 void Store::makePurchase(Purch purch)
 {
-    cash_register_.makePurchase(purch);
+    cash_register_->makePurchase(purch);
 }
 
 Store::amount_t Store::totalAmount(const Goods& goods) const
@@ -73,15 +86,15 @@ Store::amount_t Store::totalAmount(const Goods& goods) const
     if(! goodsRegistered(goods))
         { throw GoodsNotRegistered(goods); }
 
-    return goods_supplies_.at(goods.id()).totalAmount();
+    return shelves_.at(goods.id()).totalAmount();
 }
 
 void Store::show() const
 {
     cout << "store with goods : { ";
-    unordered_map<size_t, GoodsShelf>::const_iterator it = goods_supplies_.begin();
+    unordered_map<size_t, GoodsShelf>::const_iterator it = shelves_.begin();
 
-    while(it != goods_supplies_.end())
+    while(it != shelves_.end())
     {
         cout << "\t";
         std::cout << it->second;
@@ -91,8 +104,18 @@ void Store::show() const
     cout << "}";
 }
 
+Store::amount_t Store::totalAmount() const
+{
+    return accumulate(
+        shelves_.begin(), shelves_.end(),
+        0, [](amount_t curr_sum, const pair<size_t, GoodsShelf>& kvp)
+        {
+            return curr_sum + kvp.second.totalAmount();
+        });
+}
 
-
-
-
+Store::amount_t Store::cash() const
+{
+    return cash_register_->cash();
+}
 

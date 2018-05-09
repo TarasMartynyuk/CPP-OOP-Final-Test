@@ -3,7 +3,7 @@
 //
 #include <cassert>
 #include <Store/Headers/StoreExceptions.h>
-#include "store_test.h"
+#include "include_exclude_test.h"
 #include "test_utils.h"
 #include "Store.h"
 using namespace std;

@@ -23,10 +23,13 @@ class GoodsNotRegistered : public std::logic_error
 {
 public:
     explicit GoodsNotRegistered(const Goods&);
+    explicit GoodsNotRegistered(size_t goods_id);
+    
     virtual char const * what() const noexcept;
 
 private:
     std::string createMessage(const Goods&);
+    std::string createMessage(size_t goods_id);
 };
 
 

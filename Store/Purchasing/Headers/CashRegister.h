@@ -3,20 +3,22 @@
 //
 #ifndef OOPFINALEXAM_CASHREGISTER_H
 #define OOPFINALEXAM_CASHREGISTER_H
-#include "GoodsShelf.h"
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include "GoodsShelf.h"
+#include "Store.h"
 
 //class GoodsShelf;
+class Store;
 
 class CashRegister
 {
 public:
     using amount_t = GoodsShelf::amount_t;
-    using GShelves = std::unordered_map<size_t, GoodsShelf>;
+//    using GShelves = std::unordered_map<size_t, GoodsShelf>;
 
-    explicit CashRegister(const GShelves&);
+    explicit CashRegister(const Store&);
 
     amount_t cash() const;
 
@@ -29,7 +31,7 @@ public:
 
 private:
     amount_t cash_;
-    const GShelves& shelves_;
+    const Store& store_;
 };
 
 
