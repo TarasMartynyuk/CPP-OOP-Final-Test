@@ -48,6 +48,7 @@ public:
     // (or maybe have expired already)
     void removeSupplyExpiringSoonest();
 
+    bool hasEnough(amount_t amount) const;
     // no impl
     void operator=(const GoodsShelf&) = delete;
 

@@ -121,7 +121,7 @@ void RemoveNGoods_ChangesTotalAmount()
 {
     GoodsShelf gs = testGoodsShelf();
 
-    gs.addSupply(Supply(10, kInFutureLater));
+    gs.addSupply(Supply(20, kInFutureLater));
     Supply::amount_t old_amount = gs.totalAmount();
 
     gs.removeNGoodsExpiringSoonest(10);

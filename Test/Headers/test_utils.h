@@ -14,7 +14,7 @@ constexpr date::year_month_day  kInFutureSooner = 2019_y/April/30;
 constexpr date::year_month_day  kInFutureLater = 2019_y/May/4;
 
 template <typename TException>
-bool expressionThrows( void (*const expression)())
+bool expressionThrows( std::function<void()> expression)
 {
     try
     {

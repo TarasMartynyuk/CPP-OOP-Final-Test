@@ -78,7 +78,7 @@ std::vector<Supply> GoodsShelf::removeNGoodsExpiringSoonest(
 {
     if(to_remove <= 0)
         { throw invalid_argument("cannot remove less than 1 items"); }
-    if(totalAmount() < to_remove)
+    if(! hasEnough(to_remove))
         { throw Lack(goods(), to_remove); }
 
     vector<Supply> removed(to_remove * 40);
@@ -126,6 +126,12 @@ void GoodsShelf::modifySupplyExpiringSoonest(GoodsShelf::amount_t new_amount)
 const Supply& GoodsShelf::peekSupplyExpiringSoonest() const
 {
     return supplies_.top();
+}
+
+bool GoodsShelf::hasEnough(GoodsShelf::amount_t amount) const
+{
+    return totalAmount() > amount &&
+        totalAmount() - amount >= minAmount();
 }
 //endregion
 

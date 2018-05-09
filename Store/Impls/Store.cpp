@@ -7,7 +7,9 @@
 #include "Discounter.h"
 using  namespace std;
 
-Store::Store() = default;
+Store::Store()
+    : goods_supplies_(),
+        cash_register_(goods_supplies_) {}
 
 bool Store::goodsRegistered(const Goods& good) const
 {
@@ -57,7 +59,13 @@ bool Store::canExclude(const Goods& goods, amount_t amount) const
     if(! goodsRegistered(goods))
         { throw GoodsNotRegistered(goods); }
 
-    return canExclude(goods, amount, goods_supplies_.at(goods.id()));
+    return goods_supplies_.at(goods.id()).
+        hasEnough(amount);
+}
+
+void Store::makePurchase(Purch purch)
+{
+    cash_register_.makePurchase(purch);
 }
 
 Store::amount_t Store::totalAmount(const Goods& goods) const
@@ -66,14 +74,6 @@ Store::amount_t Store::totalAmount(const Goods& goods) const
         { throw GoodsNotRegistered(goods); }
 
     return goods_supplies_.at(goods.id()).totalAmount();
-}
-
-bool Store::canExclude(
-    const Goods& goods, Store::amount_t amount,
-    const GoodsShelf& supplies)
-{
-    return supplies.totalAmount() > amount &&
-           supplies.totalAmount() - amount >= supplies.minAmount();
 }
 
 void Store::show() const
@@ -90,6 +90,8 @@ void Store::show() const
     }
     cout << "}";
 }
+
+
 
 
 

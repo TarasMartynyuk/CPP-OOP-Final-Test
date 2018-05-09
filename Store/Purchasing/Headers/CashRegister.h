@@ -8,13 +8,15 @@
 #include <vector>
 #include <unordered_map>
 
-class GoodsShelf;
+//class GoodsShelf;
 
 class CashRegister
 {
 public:
     using amount_t = GoodsShelf::amount_t;
-    CashRegister(const GoodsShelf&);
+    using GShelves = std::unordered_map<size_t, GoodsShelf>;
+
+    explicit CashRegister(const GShelves&);
 
     amount_t cash() const;
 
@@ -23,11 +25,11 @@ public:
     // items get discount if their expiration dates are soon
     // throws if not enough items
     // {goods id : amount}
-    void makePurchase(std::unordered_map<size_t, amount_t> purch);
+    void makePurchase(const std::unordered_map<size_t, amount_t>& purch);
 
 private:
     amount_t cash_;
-    const GoodsShelf& shelf_;
+    const GShelves& shelves_;
 };
 
 

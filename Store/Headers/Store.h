@@ -3,6 +3,8 @@
 //
 #ifndef OOPFINALEXAM_STORE_H
 #define OOPFINALEXAM_STORE_H
+
+#include <Store/Purchasing/Headers/CashRegister.h>
 #include "Goods.h"
 #include "unordered_map"
 #include "GoodsShelf.h"
@@ -11,6 +13,7 @@ class Store
 {
 public:
     using amount_t = GoodsShelf::amount_t;
+    using Purch = std::unordered_map<size_t, amount_t>;
 
     Store();
 
@@ -19,9 +22,11 @@ public:
     void registerGoods(const Goods&, amount_t min_amount);
     bool goodsRegistered(const Goods&) const;
 
+    amount_t totalAmount(const Goods& goods) const;
+
     // trades items for cash, adding sum of purch to store cash
     // and excluding necessary amount of items
-    void makePurchase(std::unordered_map<Goods, amount_t> purch);
+    void makePurchase(Purch purch);
 
     // throws if g is not registered
     void include(const GoodsSupply&);
@@ -34,16 +39,13 @@ public:
     // true if the store can give amount items of type g
     // throws if g is not registered
     bool canExclude(const Goods& goods, amount_t amount) const;
-    amount_t totalAmount(const Goods& goods) const;
+
+    Store& operator=(const Store& other) = delete;
 
 private:
-    // id : goods info
+    // { id : goods info }
     std::unordered_map<size_t, GoodsShelf> goods_supplies_;
-
-    // oh this may need to be in the GoodsShelf class actually
-    static bool canExclude(
-        const Goods& goods, amount_t amount,
-        const GoodsShelf& supplies);
+    CashRegister cash_register_;
 };
 
 #endif //OOPFINALEXAM_STORE_H
