@@ -1,22 +1,27 @@
 #include <iostream>
-#include "test.h"
 #include "Goods.h"
 #include "date.h"
 #include "date_utils.h"
 #include <chrono>
 #include "GoodsSupply.h"
 #include "Store.h"
+#include "test.h"
 using namespace std;
 using namespace date;
 
 //void storeDemo();
+using amount_t_sh = GoodsShelf::amount_t;
 
 
 int main()
 {
+
     run_all_tests();
+
+
     return 0;
 }
+
 
 //void datePlaying()
 //{

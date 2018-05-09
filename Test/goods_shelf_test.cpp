@@ -4,6 +4,7 @@
 #include <cassert>
 #include <stdexcept>
 #include <Store/Headers/StoreExceptions.h>
+#include <numeric>
 #include "Store.h"
 #include "GoodsShelf.h"
 #include "goods_shelf_test.h"
@@ -14,7 +15,7 @@ using namespace std;
 using namespace date;
 using amount_t_sh = GoodsShelf::amount_t;
 
-GoodsShelf testInstance();
+GoodsShelf testGoodsShelf();
 
 void run_all_supplies_tests()
 {
@@ -29,13 +30,14 @@ void run_all_supplies_tests()
     RemoveNGoods_ThrowsLack_IfNotEnoughItems();
     RemoveNGoods_ChangesTotalAmount();
     RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods();
+    RemoveNGoods_ReturnsSupplies_WithTotalSumEqToRequested();
 }
 
 //region addSupply
 
 void AddSupply_ChangesTotalAmount()
 {
-    auto supplies = testInstance();
+    auto supplies = testGoodsShelf();
 
     amount_t_sh old_total = supplies.totalAmount();
 
@@ -49,7 +51,7 @@ void AddSupply_Throws_IfAddingExpired()
 {
     assert(expressionThrows<invalid_argument>([]() -> void
     {
-        auto supplies = testInstance();
+        auto supplies = testGoodsShelf();
         supplies.addSupply(Supply(20, kInPast));
     }));
     logPassed(__FUNCTION__);
@@ -60,7 +62,7 @@ void AddSupply_Throws_IfAddingExpired()
 
 void NextExpDate_IsLessThanNextDateAfterThisOne()
 {
-    GoodsShelf gs = testInstance();
+    GoodsShelf gs = testGoodsShelf();
 
     gs.addSupply(Supply(5, kInFutureLater));
     gs.addSupply(Supply(5, kInFutureSooner));
@@ -75,7 +77,7 @@ void NextExpDate_IsLessThanNextDateAfterThisOne()
 
 void NextExpDate_ReturnsTheLeastDate_OfTheAddedSupplies()
 {
-    GoodsShelf gs = testInstance();
+    GoodsShelf gs = testGoodsShelf();
 
     gs.addSupply(Supply(5, kInFutureLater));
     gs.addSupply(Supply(5, kInFutureSooner));
@@ -89,7 +91,7 @@ void NextExpDate_ReturnsTheLeastDate_OfTheAddedSupplies()
 
 void RemoveSupplyExpNext_ChangesAmount()
 {
-    GoodsShelf gs = testInstance();
+    GoodsShelf gs = testGoodsShelf();
 
     gs.addSupply(Supply(5, kInFutureLater));
     gs.addSupply(Supply(5, kInFutureSooner));
@@ -106,7 +108,7 @@ void RemoveNGoods_ThrowsLack_IfNotEnoughItems()
 {
     expressionThrows<Lack>([]()
     {
-        GoodsShelf gs = testInstance();
+        GoodsShelf gs = testGoodsShelf();
 
         gs.addSupply(Supply(5, kInFutureLater));
 
@@ -117,7 +119,7 @@ void RemoveNGoods_ThrowsLack_IfNotEnoughItems()
 
 void RemoveNGoods_ChangesTotalAmount()
 {
-    GoodsShelf gs = testInstance();
+    GoodsShelf gs = testGoodsShelf();
 
     gs.addSupply(Supply(10, kInFutureLater));
     Supply::amount_t old_amount = gs.totalAmount();
@@ -130,7 +132,7 @@ void RemoveNGoods_ChangesTotalAmount()
 
 void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods()
 {
-    GoodsShelf gs = testInstance();
+    GoodsShelf gs = testGoodsShelf();
 
     gs.addSupply(Supply(10, kInFutureLater));
     gs.addSupply(Supply(10, kInFutureSooner));
@@ -144,9 +146,31 @@ void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods()
     logPassed(__FUNCTION__);
 }
 
+void RemoveNGoods_ReturnsSupplies_WithTotalSumEqToRequested()
+{
+    auto gs = testGoodsShelf();
+
+    gs.addSupply(Supply(3, kInFutureLater));
+    gs.addSupply(Supply(6, kInFutureSooner));
+    gs.addSupply(Supply(14, kInFutureSooner));
+
+    amount_t_sh requested = 10;
+    std::vector<Supply> removed = gs.removeNGoodsExpiringSoonest(requested);
+
+//    auto accumulator = [](int sum, const Supply& right) -> amount_t_sh {
+//        return sum + right.amount();
+//    };
+//    GoodsShelf::amount_t sum = accumulate(
+//        removed.begin(), removed.end(),
+//        amount_t_sh(), accumulator);
+
+    Supply::amount_t sum = amountSum(removed);
+    assert(sum == requested);
+}
+
 //endregion
 
-GoodsShelf testInstance()
+GoodsShelf testGoodsShelf()
 {
     const amount_t_sh kMinAmount = 10;
     Goods g(0, "test_goods", 0, 50);

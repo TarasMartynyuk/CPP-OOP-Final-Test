@@ -13,6 +13,12 @@ Supply::Supply(
 
 Supply::Supply()
     : Supply(0, kDefaultDate) {}
+
+Supply::Supply(const Supply& other)
+    : Supply(
+        other.amount(),
+        other.expirationDate()) {}
+
 //region props
 
 const date::year_month_day& Supply::expirationDate() const
@@ -29,7 +35,6 @@ const Supply::amount_t& Supply::amount() const
 
 void Supply::setAmount(const Supply::amount_t amount)
     { amount_ = amount; }
-
 //endregion
 
 

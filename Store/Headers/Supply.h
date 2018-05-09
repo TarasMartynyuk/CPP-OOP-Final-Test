@@ -4,8 +4,10 @@
 #ifndef OOPFINALEXAM_SUPPLY_H
 #define OOPFINALEXAM_SUPPLY_H
 #include <cstddef>
+#include <numeric>
 #include "tz.h"
 #include "GoodsSupply.h"
+#include "algorithm"
 
 // a class holding data about one-time delivery
 // can be used as a delivery of any good, depending on context
@@ -20,6 +22,7 @@ public:
 
     Supply(amount_t amount,
         const date::year_month_day& date_expires);
+    Supply(const Supply&);
     Supply();
 
     const date::year_month_day& expirationDate() const;
@@ -44,4 +47,19 @@ struct Supply::ExpirationComparator
         return left.expirationDate() > right.expirationDate();
     }
 };
+
+template <typename SupplyIterable>
+Supply::amount_t amountSum(SupplyIterable supIt)
+{
+    auto accumulator = [](int sum, const Supply& right)
+        -> Supply::amount_t {
+        return sum + right.amount();
+    };
+
+    return std::accumulate(
+        supIt.begin(), supIt.end(),
+        Supply::amount_t(), accumulator);
+}
+
+
 #endif //OOPFINALEXAM_SUPPLY_H

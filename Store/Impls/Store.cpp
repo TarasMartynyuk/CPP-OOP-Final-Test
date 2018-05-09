@@ -7,8 +7,7 @@
 #include "Discounter.h"
 using  namespace std;
 
-
-Store::Store() {}
+Store::Store() = default;
 
 bool Store::goodsRegistered(const Goods& good) const
 {

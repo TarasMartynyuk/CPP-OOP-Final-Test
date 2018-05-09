@@ -19,6 +19,7 @@ void RemoveNGoods_ChangesTotalAmount();
 
 // i believe in long names
 void RemoveNGoods_DoesNotChangeNextExpDate_IfNextExpSupply_HasEnoughGoods();
+void RemoveNGoods_ReturnsSupplies_WithTotalSumEqToRequested();
 
 
 #endif //OOPFINALEXAM_GOODSSUPPLIES_TEST_H

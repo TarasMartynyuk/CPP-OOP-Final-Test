@@ -18,7 +18,7 @@ GoodsShelf::GoodsShelf(
 
 GoodsShelf::GoodsShelf(const GoodsShelf& other)
     : goods_(other.goods()), min_amount_(other.minAmount()),
-      total_amount_(other.totalAmount()), supplies(other.supplies) {}
+      total_amount_(other.totalAmount()), supplies_(other.supplies_) {}
 //endregion
 
 //region properties
@@ -54,18 +54,18 @@ void GoodsShelf::addSupply(Supply supply)
     if(isInPast(supply.expirationDate()))
         { throw invalid_argument("cannot add expired goods"); }
 
-    supplies.emplace(supply);
+    supplies_.emplace(supply);
     total_amount_ += supply.amount();
 }
 
 void GoodsShelf::removeSupplyExpiringSoonest()
 {
-    if(supplies.empty())
+    if(supplies_.empty())
         { throw logic_error("supplies empty"); }
 
-    assert(totalAmount() >= supplies.top().amount());
+    assert(totalAmount() >= supplies_.top().amount());
     total_amount_ -= peekSupplyExpiringSoonest().amount();
-    supplies.pop();
+    supplies_.pop();
 }
 
 const year_month_day& GoodsShelf::nextExpirationDate() const
@@ -73,34 +73,43 @@ const year_month_day& GoodsShelf::nextExpirationDate() const
     return peekSupplyExpiringSoonest().expirationDate();
 }
 
-void GoodsShelf::removeNGoodsExpiringSoonest(GoodsShelf::amount_t items)
+std::vector<Supply> GoodsShelf::removeNGoodsExpiringSoonest(
+    GoodsShelf::amount_t to_remove)
 {
-    if(items <= 0)
+    if(to_remove <= 0)
         { throw invalid_argument("cannot remove less than 1 items"); }
-    if(totalAmount() < items)
-        { throw Lack(goods(), items); }
+    if(totalAmount() < to_remove)
+        { throw Lack(goods(), to_remove); }
 
+    vector<Supply> removed(to_remove * 40);
     amount_t sum = 0;
 
-    while(sum < items)
+    while(sum < to_remove)
     {
+        amount_t left = to_remove - sum;
         // we can satisfy the requirement this iteration
-        amount_t left = items - sum;
-        if(left < peekSupplyExpiringSoonest().amount())
-        {
-            modifySupplyExpiringSoonest(peekSupplyExpiringSoonest().amount() - left);
+        const amount_t next_supply_amount =
+            peekSupplyExpiringSoonest().amount();
+
+        if(left < next_supply_amount)
+        {   // then take part of supply and leave rest
+            modifySupplyExpiringSoonest(next_supply_amount - left);
+            removed.push_back(
+                Supply(left, peekSupplyExpiringSoonest().expirationDate()
+            ));
             sum += left;
         }
-        else
+        else    // take the full supply
         {
-            sum += peekSupplyExpiringSoonest().amount();
+            sum += next_supply_amount;
+            removed.push_back(peekSupplyExpiringSoonest());
             removeSupplyExpiringSoonest();
-
-            if(sum == items)
-                { return; }
+            assert(left == next_supply_amount || ! supplies_.empty());
         }
-        assert(! supplies.empty());
     }
+
+    assert(amountSum(removed) == to_remove);
+    return removed;
 }
 
 void GoodsShelf::modifySupplyExpiringSoonest(GoodsShelf::amount_t new_amount)
@@ -116,7 +125,7 @@ void GoodsShelf::modifySupplyExpiringSoonest(GoodsShelf::amount_t new_amount)
 
 const Supply& GoodsShelf::peekSupplyExpiringSoonest() const
 {
-    return supplies.top();
+    return supplies_.top();
 }
 //endregion
 

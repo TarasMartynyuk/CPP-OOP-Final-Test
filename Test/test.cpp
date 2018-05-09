@@ -10,8 +10,8 @@
 
 void run_all_tests()
 {
-//    run_all_supplies_tests();
-//    std::cout << "\n";
+    run_all_supplies_tests();
+    std::cout << "\n";
 //    test_store();
 //    std::cout << "\n";
     run_all_purch_tests();
@@ -19,18 +19,3 @@ void run_all_tests()
 
     logAllPassed();
 }
-
-
-//#include "date_utils.h"
-//#include "date.h"
-//using namespace date;
-//void ToLocDays_ConvertedToFrom_EqOriginal()
-//{
-//    year_month_day orig = kInPast;
-//
-//    auto loc_days = toLocalDays(orig);
-//
-//    year_month_day there_and_back_again(loc_days);
-//
-//    assert(there_and_back_again == orig);
-//}
