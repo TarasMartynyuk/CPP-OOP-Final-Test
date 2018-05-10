@@ -9,7 +9,6 @@
 #include "GoodsShelf.h"
 #include "Store.h"
 
-//class GoodsShelf;
 class Store;
 
 class CashRegister
@@ -18,7 +17,7 @@ public:
     using amount_t = GoodsShelf::amount_t;
 //    using GShelves = std::unordered_map<size_t, GoodsShelf>;
 
-    explicit CashRegister(const Store&);
+    explicit CashRegister(Store&);
 
     amount_t cash() const;
 
@@ -31,7 +30,7 @@ public:
 
 private:
     amount_t cash_;
-    const Store& store_;
+    Store& store_;
 };
 
 

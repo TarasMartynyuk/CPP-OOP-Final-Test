@@ -18,17 +18,7 @@ public:
     using Purch = std::unordered_map<size_t, amount_t>;
 
     Store();
-
-    void show() const;
     
-    //region registering
-    
-    void registerGoods(const Goods&, amount_t min_amount);
-    
-    bool goodsRegistered(const Goods&) const;
-    
-    bool goodsRegistered(const size_t&) const;
-    //endregion
     //region props
     
     amount_t totalAmount(const Goods& goods) const;
@@ -38,10 +28,25 @@ public:
     
     amount_t cash() const;
     //endregion
+    //region registering
+    
+    void registerGoods(const Goods&, amount_t min_amount);
+    
+    bool goodsRegistered(const Goods&) const;
+    
+    bool goodsRegistered(const size_t&) const;
+    
+    bool allGoodsRegistered(const Purch&) const;
+    
+    //endregion
     
     // trades items for cash, adding sum of purch to store cash
     // and excluding necessary amount of items
-    void makePurchase(Purch purch);
+    void makePurchase(const Purch& purch);
+    
+    void show() const;
+    
+    //region include exclude
     
     // throws if g is not registered
     void include(const GoodsSupply&);
@@ -49,12 +54,24 @@ public:
     // throws Lack exception if there is less than minimum amount
     // of goods at the store
     // throws if g is not registered or if there is not enough goods
-    void exclude(const Goods& gds, amount_t amount);
+    // TODO: mb GoodsSupply should be returned, as in outer context
+    // supply would not be linked to it's goods
+    // can't do it, as goods supply does not have knowledge of expiration...
+    std::vector<Supply> exclude(
+        const Goods& gds, amount_t amount);
+    std::vector<Supply> exclude(
+        size_t goods_id, amount_t amount);
 
     // true if the store can give amount items of type g
     // throws if g is not registered
-    bool canExclude(const Goods& goods, amount_t amount) const;
-    bool canExclude(size_t goods_id, amount_t amount) const;
+    bool hasEnough(
+        const Goods& goods, amount_t amount) const;
+    
+    bool hasEnough(
+        size_t goods_id, amount_t amount) const;
+    
+    bool hasEnough(const Purch&) const;
+    //endregion
     
     Store& operator=(const Store& other) = delete;
 

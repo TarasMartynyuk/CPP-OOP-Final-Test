@@ -31,7 +31,7 @@ void IncludeExcludeCanExclude_Throws_WhenNotRegistered()
         Store().exclude(goods, 10);
     });
     expressionThrows<GoodsNotRegistered>([]() {
-        Store().canExclude(goods, 10);
+        Store().hasEnough(goods, 10);
     });
 
     logPassed(__FUNCTION__);

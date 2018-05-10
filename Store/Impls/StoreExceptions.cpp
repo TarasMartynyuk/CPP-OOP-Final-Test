@@ -12,17 +12,30 @@ Lack::Lack(const Goods& gds,
     : logic_error(createMessage(gds, amount))
 {}
 
-string Lack::createMessage(const Goods& gds, size_t amount)
+Lack::Lack(size_t goods_id,
+    GoodsSupply::amount_t amount)
+    : logic_error(createMessage(goods_id, amount)) {}
+
+char const* Lack::what() const noexcept
+{
+    return logic_error::what();
+}
+
+string Lack::createMessage(const Goods& gds,
+    amount_t amount)
 {
     stringstream ss;
     ss << "the store does not have " << amount << " items of goods: " << gds;
     return ss.str();
 }
 
-char const* Lack::what() const noexcept
+std::string Lack::createMessage(size_t goods_id,
+    Lack::amount_t amount)
 {
-    return logic_error::what();
+    return "the store does not have " + to_string(amount) +
+           " items of goods with id: " + to_string(goods_id);
 }
+
 //endregion
 
 //region GoodsNotRegistered

@@ -33,6 +33,8 @@ void Store::registerGoods(const Goods& gd, amount_t min_amount)
 }
 //endregion
 
+//region include exclude
+
 void Store::include(const GoodsSupply& g_supply)
 {
     if(! goodsRegistered(g_supply.goods()))
@@ -48,26 +50,35 @@ void Store::include(const GoodsSupply& g_supply)
         Supply(g_supply.amount(), exp_date));
 }
 
-void Store::exclude(const Goods& gds, amount_t amount)
+vector<Supply> Store::exclude(const Goods& gds,
+    amount_t amount)
 {
-    if(! goodsRegistered(gds))
-        { throw GoodsNotRegistered(gds); }
-
-    GoodsShelf& supplies = shelves_.at(gds.id());
-
-   // duplicating check for Lack here, but this way the impl of Store is independent from impl of GoodsShelf
-    if(! canExclude(gds, amount))
-        { throw Lack(gds, amount); }
-
-    supplies.removeNGoodsExpiringSoonest(amount);
+    return exclude(gds.id(), amount);
 }
 
-bool Store::canExclude(const Goods& goods, amount_t amount) const
+vector<Supply> Store::exclude(size_t goods_id,
+    Store::amount_t amount)
 {
-    return canExclude(goods.id(), amount);
+    if(! goodsRegistered(goods_id))
+    { throw GoodsNotRegistered(goods_id); }
+    
+    GoodsShelf& supplies = shelves_.at(goods_id);
+    
+    // duplicating check for Lack here, but this way the impl of Store is independent from impl of GoodsShelf
+    if(!hasEnough(goods_id, amount))
+        { throw Lack(goods_id, amount); }
+    
+    return supplies.removeNGoodsExpiringSoonest(amount);
 }
 
-bool Store::canExclude(size_t goods_id, Store::amount_t amount) const
+bool Store::hasEnough(const Goods& goods,
+    amount_t amount) const
+{
+    return hasEnough(goods.id(), amount);
+}
+
+bool Store::hasEnough(size_t goods_id,
+    Store::amount_t amount) const
 {
     if(! goodsRegistered(goods_id))
         { throw GoodsNotRegistered(goods_id); }
@@ -75,8 +86,9 @@ bool Store::canExclude(size_t goods_id, Store::amount_t amount) const
     return shelves_.at(goods_id).
         hasEnough(amount);
 }
+//endregion
 
-void Store::makePurchase(Purch purch)
+void Store::makePurchase(const Purch& purch)
 {
     cash_register_->makePurchase(purch);
 }
@@ -118,4 +130,25 @@ Store::amount_t Store::cash() const
 {
     return cash_register_->cash();
 }
+
+bool Store::hasEnough(const Purch& purch) const
+{
+    return all_of(
+        purch.begin(), purch.end(),
+        [this](const pair<size_t, amount_t>& kvp) {
+            return hasEnough(
+                kvp.first, kvp.second);
+        });
+}
+
+bool Store::allGoodsRegistered(
+    const Store::Purch& purch) const
+{
+    return all_of(
+        purch.begin(), purch.end(),
+        [this](const pair<size_t, amount_t>& kvp) {
+            return goodsRegistered(kvp.first);
+        });
+}
+
 
