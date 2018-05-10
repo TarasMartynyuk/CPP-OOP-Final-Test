@@ -25,6 +25,7 @@ void run_all_purch_tests()
 {
     ThrowsLack_IfPurchAmount_GraterThanStoreHas();
     ThrowsLack_IfMoreItemsOfGoodsInPurch_ThanStoreHas();
+    ChangesShelvesTotalAmount_ByPurchaseAmount();
 }
 
 void ThrowsLack_IfPurchAmount_GraterThanStoreHas()
@@ -65,14 +66,14 @@ void ChangesShelvesTotalAmount_ByPurchaseAmount()
     Purch purch
     {
         { nice_goods.id(), kNiceAmount },
-        { soso_goods.id(), kSosoAmount + 1 }
+        { soso_goods.id(), kSosoAmount - 1 }
     };
-    amount_c purch_amount = kNiceAmount + kSosoAmount + 1;
+    amount_c purch_amount = kNiceAmount + kSosoAmount - 1;
     amount_c orig_amount = st.totalAmount();
 
     st.makePurchase(purch);
 
-    assert(st.totalAmount() == orig_amount + purch_amount);
+    assert(st.totalAmount() == orig_amount - purch_amount);
     logPassed(__FUNCTION__);
 }
 

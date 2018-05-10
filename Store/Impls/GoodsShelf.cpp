@@ -130,7 +130,9 @@ const Supply& GoodsShelf::peekSupplyExpiringSoonest() const
 
 bool GoodsShelf::hasEnough(GoodsShelf::amount_t amount) const
 {
-    return totalAmount() > amount &&
+//    bool b1 = totalAmount() >= amount;
+//    bool b2 = totalAmount() - amount >= minAmount();
+    return totalAmount() >= amount &&
         totalAmount() - amount >= minAmount();
 }
 //endregion

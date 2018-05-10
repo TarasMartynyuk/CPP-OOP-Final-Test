@@ -7,7 +7,7 @@ using namespace std;
 
 
 CashRegister::CashRegister(const Store& store)
-    : store_(store) {}
+    : store_(store), cash_(0) {}
 
 CashRegister::amount_t CashRegister::cash() const
     { return cash_; }
@@ -41,7 +41,7 @@ void CashRegister::makePurchase(
                                  "at least for one goods in the purchase"); }
 
     unordered_map<size_t, PurchSupply> supplies_for_purch;
-
+    
 //    for(const auto& kvp : supplies_for_purch)
 //    {
 //        auto supplies = store_.at()
