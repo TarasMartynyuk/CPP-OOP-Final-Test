@@ -25,8 +25,7 @@ public:
     // items get discount if their expiration dates are soon
     // throws if not enough items
     // {goods id : amount}
-    void makePurchase (
-        const std::unordered_map<size_t, amount_t>& purch);
+    void makePurchase(const std::unordered_map<size_t, amount_t>& purch);
 
 private:
     int cash_;
