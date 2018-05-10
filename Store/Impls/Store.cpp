@@ -8,8 +8,11 @@
 using  namespace std;
 
 Store::Store()
-    : shelves_(),
-        cash_register_(new CashRegister(*this)) {}
+    : shelves_(), excluder_(shelves_),
+        cash_register_(new CashRegister(*this))
+{
+    excluder_.throwAwayExpiredSuppliesPeriodically(date::days(1));
+}
 
 //region registering
 

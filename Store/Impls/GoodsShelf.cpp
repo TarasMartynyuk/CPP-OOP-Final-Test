@@ -42,31 +42,7 @@ void GoodsShelf::setMinAmount(
 }
 
 //endregion
-
-//region methods
-
-void GoodsShelf::addSupply(Supply supply)
-{
-    // it is handled in ctor, so we are asserting, not checking
-    if(supply.amount() <= 0)
-        { throw invalid_argument("cannot add less than 1 items"); }
-
-    if(isInPast(supply.expirationDate()))
-        { throw invalid_argument("cannot add expired goods"); }
-
-    supplies_.emplace(supply);
-    total_amount_ += supply.amount();
-}
-
-void GoodsShelf::removeSupplyExpiringSoonest()
-{
-    if(supplies_.empty())
-        { throw logic_error("supplies empty"); }
-
-    assert(totalAmount() >= supplies_.top().amount());
-    total_amount_ -= peekSupplyExpiringSoonest().amount();
-    supplies_.pop();
-}
+//region removing
 
 const year_month_day& GoodsShelf::nextExpirationDate() const
 {
@@ -77,9 +53,9 @@ std::vector<Supply> GoodsShelf::removeNGoodsExpiringSoonest(
     GoodsShelf::amount_t to_remove)
 {
     if(to_remove <= 0)
-        { throw invalid_argument("cannot remove less than 1 items"); }
+    { throw invalid_argument("cannot remove less than 1 items"); }
     if(! hasEnough(to_remove))
-        { throw Lack(goods(), to_remove); }
+    { throw Lack(goods(), to_remove); }
 
     vector<Supply> removed(to_remove / 40);
 
@@ -97,7 +73,7 @@ std::vector<Supply> GoodsShelf::removeNGoodsExpiringSoonest(
             modifySupplyExpiringSoonest(next_supply_amount - left);
             removed.push_back(
                 Supply(left, peekSupplyExpiringSoonest().expirationDate()
-            ));
+                      ));
             sum += left;
         }
         else    // take the full supply
@@ -111,6 +87,39 @@ std::vector<Supply> GoodsShelf::removeNGoodsExpiringSoonest(
 
     assert(amountSum(removed) == to_remove);
     return removed;
+}
+
+void GoodsShelf::removeSupplyExpiringSoonest()
+{
+    if(supplies_.empty())
+    { throw logic_error("supplies empty"); }
+
+    assert(totalAmount() >= supplies_.top().amount());
+    total_amount_ -= peekSupplyExpiringSoonest().amount();
+    supplies_.pop();
+}
+
+void GoodsShelf::removeExpiredSupplies()
+{
+    while(isInPast(nextExpirationDate()))
+        { removeSupplyExpiringSoonest(); }
+}//endregion
+
+
+
+//region methods
+
+void GoodsShelf::addSupply(Supply supply)
+{
+    // it is handled in ctor, so we are asserting, not checking
+    if(supply.amount() <= 0)
+        { throw invalid_argument("cannot add less than 1 items"); }
+
+    if(isInPast(supply.expirationDate()))
+        { throw invalid_argument("cannot add expired goods"); }
+
+    supplies_.emplace(supply);
+    total_amount_ += supply.amount();
 }
 
 void GoodsShelf::modifySupplyExpiringSoonest(GoodsShelf::amount_t new_amount)
@@ -136,6 +145,7 @@ bool GoodsShelf::hasEnough(GoodsShelf::amount_t amount) const
     return totalAmount() >= amount &&
         totalAmount() - amount >= minAmount();
 }
+
 //endregion
 
 std::ostream& operator<<(std::ostream& os, const GoodsShelf& shelf)

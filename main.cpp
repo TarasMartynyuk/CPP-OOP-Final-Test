@@ -1,19 +1,19 @@
 #include <iostream>
 //#include "Goods.h"
-//#include "date.h"
+#include "date.h"
 //#include "date_utils.h"
 #include <chrono>
 //#include "GoodsSupply.h"
-//#include "Store.h"
+#include "Store.h"
 //#include "test.h"
 using namespace std;
-//using namespace date;
+using namespace date;
 
 //void storeDemo();
 void trap_tests();
 
 //using amount_t_sh = GoodsShelf::amount_t;
-
+#include "ExpiredGoodsExcluder.h"
 #include "Trapezium.h"
 #include "LinearTrapezium.h"
 using namespace Trapezium;
@@ -21,25 +21,20 @@ using namespace Trapezium;
 int main()
 {
 //    run_all_tests();
-//    auto tod = today();
-//    LinearTrapezium lt(Segment1D(0, 1),  1, 1);
-    trap_tests();
-//    cout << lt.area();
-//    cout << addDays(today(), days(30));
+
+//    repeatAction(f, days(1));
+    Store st;
 
     return 0;
 }
 
 void trap_tests()
 {
-    LinearFunc lf(1, 0);
-
-    cout << "k*1 + b = " << lf(1);
-
-    LinearTrapezium lt(Segment1D(1, 10), 1, 0);
-
-    cout << "area of trap (1, 10), k = 1, b = 0 : \n" << lt.area();
-
+//    LinearFunc lf(1, 0);
+//
+//    cout << "k*1 + b = " << lf(1);
+//    LinearTrapezium lt(Segment1D(1, 10), 1, 0);
+//    cout << "area of trap (1, 10), k = 1, b = 0 : \n" << lt.area();
 }
 
 

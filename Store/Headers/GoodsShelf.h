@@ -33,6 +33,15 @@ public:
 
     void addSupply(Supply supply);
 
+    bool hasEnough(amount_t amount) const;
+
+    //region removing
+
+    // the date of the expiration of the next supply
+    const date::year_month_day& nextExpirationDate() const;
+
+    void removeExpiredSupplies();
+
     // returns the supplies, that together contain the requested amount of items,
     // removing them from shelf
     // if the last supply is not fully used, it remains on the shelf
@@ -41,15 +50,11 @@ public:
     // less than minimal amount
     std::vector<Supply> removeNGoodsExpiringSoonest(amount_t to_remove);
 
-    // the date of the expiration of the next supply
-    const date::year_month_day& nextExpirationDate() const;
-
     // throws away the whole supply that would expire soonest
     // (or maybe have expired already)
     void removeSupplyExpiringSoonest();
+    //endregion
 
-    bool hasEnough(amount_t amount) const;
-    // no impl
     void operator=(const GoodsShelf&) = delete;
 
 private:

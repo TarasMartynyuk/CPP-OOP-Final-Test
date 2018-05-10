@@ -7,6 +7,7 @@
 #include "Goods.h"
 #include "unordered_map"
 #include "GoodsShelf.h"
+#include "ExpiredGoodsExcluder.h"
 
 class CashRegister;
 
@@ -23,6 +24,7 @@ public:
     amount_t totalAmount(const Goods& goods) const;
     
     // amount of items of all goods
+    // should probably cash that...
     amount_t totalAmount() const;
     
     double cash() const;
@@ -81,6 +83,7 @@ private:
     // { id : goods info }
     std::unordered_map<size_t, GoodsShelf> shelves_;
     CashRegister* cash_register_ ;
+    ExpiredGoodsExcluder excluder_;
 };
 
 #endif //OOPFINALEXAM_STORE_H

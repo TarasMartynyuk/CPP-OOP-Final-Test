@@ -9,9 +9,9 @@ namespace Trapezium
 
 CurvedTrapezium::CurvedTrapezium(
     const std::function<double(double)>& f,
-    Segment1D segment_)
+    Segment1D segment)
     : not_necessarily_linear_func(f),
-    segment_(segment_)
+    segment_(segment)
 {}
 
 const std::function<double(double)>& CurvedTrapezium::getNotNecessarilyLinearFunc() const
