@@ -27,7 +27,7 @@ private:
     Segment1D segment_;
     LinearFunc linearFunc;
 
-    double doArea() const override;
+    virtual double doArea() const override;
 };
 
 } //Trapezium

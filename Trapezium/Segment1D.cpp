@@ -10,6 +10,9 @@ Trapezium::Segment1D::Segment1D(double a, double b)
 {
     if (a >= b)
         {throw invalid_argument("a must be less than b"); }
+
+    a_ = a;
+    b_ = b;
 }
 
 double Trapezium::Segment1D::getA() const
