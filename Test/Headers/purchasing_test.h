@@ -6,10 +6,14 @@
 
 void run_all_purch_tests();
 
-void ThrowsLack_IfPurchAmount_GraterThanStoreHas();
-void ThrowsLack_IfMoreItemsOfGoodsInPurch_ThanStoreHas();
-void ChangesShelvesTotalAmount_ByPurchaseAmount();
-void AddsPurchSum_ToCash();
+void MakePurch_ThrowsLack_IfPurchAmount_GraterThanStoreHas();
+void MakePurch_ThrowsLack_IfMoreItemsOfGoodsInPurch_ThanStoreHas();
+void MakePurch_ChangesShelvesTotalAmount_ByPurchaseAmount();
+void MakePurch_AddsPurchSum_ToCash();
+
+void Discount_ReturnsNulls_IfNoOneQualifies();
+void Discount_ReturnsNotNull_IfOneQualifies();
+
 // TODO: test that the amount is changed correctly
 // separately for each goods in purch
 

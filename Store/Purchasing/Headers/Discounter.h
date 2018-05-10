@@ -10,33 +10,22 @@
 class Discounter
 {
 public:
+    //    days_left : discount
     using DiscountedSupply = std::pair<Supply, float *>;
+    using DiscountToPeriod = std::pair<date::days, float>;
+    // sorted by days left ascending,
+    // and by discount percents descending
+    static const std::vector<DiscountToPeriod> kDiscounts;
     
     // adds discount foreach supply depending on expiration date
     static std::vector<DiscountedSupply> applyDiscountsIfNeeded(
         std::vector<Supply>&);
 
 private:
-    using DiscountToPeriod = std::pair<date::days, float>;
-    // discount : min time left to expire to be granted this discount
-    // vec will be sorted by the days
-    // and we will check the supply against each of the discounts, stopping when some will have
-    // days greater that time till expiration
-    static const std::vector<DiscountToPeriod> discounts;
-
-    // sorts by discount percents
-    struct DiscountComparator;
-
+    // retugns nullptr if no discount can be assigned
     static float* getMaxDiscount(const Supply&);
 };
 
-struct Discounter::DiscountComparator
-{
-    bool operator()(const DiscountToPeriod& left, const DiscountToPeriod& right)
-    {
-        return left.second < right.second;
-    }
-};
 
 
 
