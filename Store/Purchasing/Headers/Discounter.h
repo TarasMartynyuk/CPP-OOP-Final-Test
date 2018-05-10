@@ -3,15 +3,19 @@
 //
 #ifndef OOPFINALEXAM_DISCOUNTER_H
 #define OOPFINALEXAM_DISCOUNTER_H
-
 #include <vector>
 #include "Supply.h"
+#include "Discount.h"
 
+// adds discounts to goods taking into account their expiration date
 class Discounter
 {
 public:
-//    static std::vector<PurchaseItem> applyDiscountsIfNeeded(
-//        std::vector<Supply>);
+    using DiscountedSupply = std::pair<Supply, Discount*>;
+    
+    // adds discount foreach supply depending on expiration date
+    static  std::vector<DiscountedSupply> applyDiscountsIfNeeded(
+        std::vector<Supply>&);
 
 private:
     // discount : min time left to expire to be granted this discount

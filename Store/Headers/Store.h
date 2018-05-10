@@ -3,7 +3,6 @@
 //
 #ifndef OOPFINALEXAM_STORE_H
 #define OOPFINALEXAM_STORE_H
-
 #include "CashRegister.h"
 #include "Goods.h"
 #include "unordered_map"
@@ -26,7 +25,7 @@ public:
     // amount of items of all goods
     amount_t totalAmount() const;
     
-    amount_t cash() const;
+    int cash() const;
     //endregion
     //region registering
     
@@ -45,6 +44,9 @@ public:
     void makePurchase(const Purch& purch);
     
     void show() const;
+    
+    // trows if not registered, like pretty much everything here
+    Goods goodsForId(size_t id) const;
     
     //region include exclude
     

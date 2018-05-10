@@ -24,18 +24,24 @@ void CashRegister::makePurchase(
     
     using PurchSupply = std::pair<Supply, Discount*>;
     // { goods_id : discounted supplies}
-    unordered_map<size_t, PurchSupply> supplies_for_purch;
+//    unordered_map<size_t, PurchSupply> supplies_for_purch;
     
-    for(const auto& kvp : supplies_for_purch)
+    for(const auto& kvp : purch)
     {
         size_t id = kvp.first;
         Store::amount_t amount = purch.at(id);
         
         vector<Supply> supplies = store_.exclude(id, amount);
-//        supplies_for_purch.insert()
-
+//        cash_ += costs(supplies, store_.goodsForId(id).pricePerItem());
     }
     
+}
+
+int CashRegister::costs (
+    const vector<Supply>& supplies, int cost_per_item)
+{
+    assert(cost_per_item > 0);
+    throw std::invalid_argument("not implemented");
 }
 
 

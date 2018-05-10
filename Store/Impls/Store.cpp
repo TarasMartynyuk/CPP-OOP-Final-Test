@@ -23,6 +23,16 @@ bool Store::goodsRegistered(const size_t& goods_id) const
     return shelves_.count(goods_id) == 1;
 }
 
+bool Store::allGoodsRegistered(
+    const Store::Purch& purch) const
+{
+    return all_of(
+        purch.begin(), purch.end(),
+        [this](const pair<size_t, amount_t>& kvp) {
+            return goodsRegistered(kvp.first);
+        });
+}
+
 void Store::registerGoods(const Goods& gd, amount_t min_amount)
 {
     if(goodsRegistered(gd))
@@ -30,8 +40,7 @@ void Store::registerGoods(const Goods& gd, amount_t min_amount)
 
     shelves_.insert(std::make_pair(
         gd.id(), GoodsShelf(gd, min_amount)));
-}
-//endregion
+}//endregion
 
 //region include exclude
 
@@ -86,12 +95,23 @@ bool Store::hasEnough(size_t goods_id,
     return shelves_.at(goods_id).
         hasEnough(amount);
 }
-//endregion
+
+bool Store::hasEnough(const Purch& purch) const
+{
+    return all_of(
+        purch.begin(), purch.end(),
+        [this](const pair<size_t, amount_t>& kvp) {
+            return hasEnough(
+                kvp.first, kvp.second);
+        });
+}//endregion
 
 void Store::makePurchase(const Purch& purch)
 {
     cash_register_->makePurchase(purch);
 }
+
+//region props
 
 Store::amount_t Store::totalAmount(const Goods& goods) const
 {
@@ -99,21 +119,6 @@ Store::amount_t Store::totalAmount(const Goods& goods) const
         { throw GoodsNotRegistered(goods); }
 
     return shelves_.at(goods.id()).totalAmount();
-}
-
-void Store::show() const
-{
-    cout << "store with goods : { ";
-    unordered_map<size_t, GoodsShelf>::const_iterator it = shelves_.begin();
-
-    while(it != shelves_.end())
-    {
-        cout << "\t";
-        std::cout << it->second;
-        cout << "\n";
-        it++;
-    }
-    cout << "}";
 }
 
 Store::amount_t Store::totalAmount() const
@@ -126,29 +131,32 @@ Store::amount_t Store::totalAmount() const
         });
 }
 
-Store::amount_t Store::cash() const
+int Store::cash() const
 {
     return cash_register_->cash();
+}//endregion
+
+void Store::show() const
+{
+    cout << "store with goods : { ";
+    unordered_map<size_t, GoodsShelf>::const_iterator it = shelves_.begin();
+    
+    while(it != shelves_.end())
+    {
+        cout << "\t";
+        std::cout << it->second;
+        cout << "\n";
+        it++;
+    }
+    cout << "}";
 }
 
-bool Store::hasEnough(const Purch& purch) const
+Goods Store::goodsForId (size_t id) const
 {
-    return all_of(
-        purch.begin(), purch.end(),
-        [this](const pair<size_t, amount_t>& kvp) {
-            return hasEnough(
-                kvp.first, kvp.second);
-        });
-}
-
-bool Store::allGoodsRegistered(
-    const Store::Purch& purch) const
-{
-    return all_of(
-        purch.begin(), purch.end(),
-        [this](const pair<size_t, amount_t>& kvp) {
-            return goodsRegistered(kvp.first);
-        });
+    if(! goodsRegistered(id))
+        { throw GoodsNotRegistered(id); }
+    
+    return shelves_.at(id).goods();
 }
 
 

@@ -5,8 +5,10 @@
 #include <iostream>
 using namespace std;
 
-Goods::Goods(size_t id, std::string name,
-    size_t price_per_item, size_t freshness_period)
+Goods::Goods (size_t id,
+    const string& name,
+    int price_per_item,
+    size_t freshness_period)
     : id_(id), name_(name),
       price_per_item_(price_per_item),
       freshness_period_(freshness_period)
@@ -17,34 +19,26 @@ Goods::Goods()
 
 //region props
 
-const size_t& Goods::id() const
-{
-    return  id_;
-}
+void Goods::setId (size_t id)
+    { id_ = id; }
 
-size_t& Goods::id()
-{
-    return id_;
-}
+size_t Goods::id() const
+    { return id_; }
 
 const string& Goods::name() const
-{
-    return name_;
-}
+    { return name_; }
 
-std::string& Goods::name()
-{
-    return name_;
-}
+void Goods::setName (const std::string& name)
+    { name_ = name; }
 
-size_t& Goods::pricePerItem()
-{
-    return price_per_item_;
-}
+int Goods::pricePerItem () const
+    { return price_per_item_; }
 
-const size_t& Goods::pricePerItem() const
+void Goods::setPricePerItem (int price)
 {
-    return price_per_item_;
+    if( price <= 0)
+        { throw invalid_argument("price must be > 0"); }
+    price_per_item_ = price;
 }
 
 date::days Goods::freshnessPeriod() const

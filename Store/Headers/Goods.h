@@ -11,28 +11,28 @@
 class Goods
 {
 public:
-    Goods(size_t id,
-        std::string name,
-        size_t price_per_item,
+    Goods (size_t id,
+        const std::string& name,
+        int price_per_item,
         size_t freshness_period);
     Goods();
 
     //should pass by value
-    size_t& id();
-    const size_t& id() const;
+    size_t id() const;
+    void setId (size_t);
 
-    std::string& name();
     const std::string& name() const;
+    void setName (const std::string&);
 
-    size_t& pricePerItem();
-    const size_t& pricePerItem() const;
+    int pricePerItem () const;
+    void setPricePerItem (int);
 
     date::days freshnessPeriod() const;
     void setFreshnessPeriod(date::days);
 
 private:
     size_t id_;
-    size_t price_per_item_;
+    int price_per_item_;
     std::string name_;
     date::days freshness_period_;
 };

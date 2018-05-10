@@ -15,9 +15,8 @@ class CashRegister
 {
 public:
     using amount_t = GoodsShelf::amount_t;
-//    using GShelves = std::unordered_map<size_t, GoodsShelf>;
 
-    explicit CashRegister(Store&);
+    explicit CashRegister (Store&);
 
     amount_t cash() const;
 
@@ -26,11 +25,15 @@ public:
     // items get discount if their expiration dates are soon
     // throws if not enough items
     // {goods id : amount}
-    void makePurchase(const std::unordered_map<size_t, amount_t>& purch);
+    void makePurchase (
+        const std::unordered_map<size_t, amount_t>& purch);
 
 private:
-    amount_t cash_;
+    int cash_;
     Store& store_;
+    
+    int costs (const std::vector<Supply>& supplies,
+        int cost_per_item);
 };
 
 

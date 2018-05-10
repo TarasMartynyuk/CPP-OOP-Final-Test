@@ -34,7 +34,7 @@ void ThrowsLack_IfPurchAmount_GraterThanStoreHas()
 
     Purch purch
     {
-        { nice_goods.id(), kNiceAmount + kSosoAmount + 5 },
+        {nice_goods.id(), kNiceAmount + kSosoAmount + 5 },
     };
 
     assert(expressionThrows<invalid_argument>([&](){
@@ -49,8 +49,8 @@ void ThrowsLack_IfMoreItemsOfGoodsInPurch_ThanStoreHas()
 
     Purch purch
     {
-        { nice_goods.id(), kNiceAmount },
-        { soso_goods.id(), kSosoAmount + 1 }
+        {nice_goods.id(), kNiceAmount },
+        {soso_goods.id(), kSosoAmount + 1 }
     };
 
     assert(expressionThrows<invalid_argument>([&](){
@@ -65,8 +65,8 @@ void ChangesShelvesTotalAmount_ByPurchaseAmount()
 
     Purch purch
     {
-        { nice_goods.id(), kNiceAmount },
-        { soso_goods.id(), kSosoAmount - 1 }
+        {nice_goods.id(), kNiceAmount },
+        {soso_goods.id(), kSosoAmount - 1 }
     };
     amount_c purch_amount = kNiceAmount + kSosoAmount - 1;
     amount_c orig_amount = st.totalAmount();
