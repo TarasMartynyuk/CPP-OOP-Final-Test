@@ -18,13 +18,13 @@ static const date::year_month_day kDefaultDate =
 bool isInPast(const date::year_month_day&);
 bool isInFuture(const date::year_month_day&);
 
+date::days daysLeft(const date::year_month_day& ymd);
+
 date::year_month_day addDays(
     const date::year_month_day& ymd,
     date::days days
     );
 
 date::year_month_day today();
-date::local_days toLocalDays(const date::year_month_day&);
-
 
 #endif //OOPFINALEXAM_DATE_UTILS_H

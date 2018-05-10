@@ -1,9 +1,8 @@
 //
 // Created by Taras Martynyuk on 5/2/2018.
 //
-#include <Store/Purchasing/Headers/Discounter.h>
+#include "Discounter.h"
 #include "CashRegister.h"
-#include "Discount.h"
 using namespace std;
 
 

@@ -7,13 +7,16 @@
 using namespace date;
 using namespace std::chrono;
 
+local_days local_days_till_today()
+{
+    return floor<days>(
+        make_zoned(k2ndZone, system_clock::now())
+            .get_local_time());
+}
+
 year_month_day today()
 {
-    return year_month_day(
-        floor<days>(
-        make_zoned(k2ndZone, system_clock::now())
-            .get_local_time())
-    );
+    return year_month_day(local_days_till_today());
 }
 
 bool isInPast(
@@ -31,9 +34,10 @@ date::year_month_day addDays(const date::year_month_day& ymd,
 
     return year_month_day(start_loc_days + days);
 }
-//
-//date::local_days toLocalDays(const date::year_month_day& ymd)
-//{
-//    return
-//}
+
+days daysLeft(const date::year_month_day& ymd)
+{
+    return static_cast<local_days>(ymd) -
+        local_days_till_today();
+}
 
