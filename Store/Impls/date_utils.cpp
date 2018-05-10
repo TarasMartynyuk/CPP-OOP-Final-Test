@@ -28,16 +28,21 @@ bool isInFuture(
     { return ymd > today(); }
 
 date::year_month_day addDays(const date::year_month_day& ymd,
-    date::days days)
+    date::days d)
 {
     auto start_loc_days = static_cast<local_days> (ymd);
-
-    return year_month_day(start_loc_days + days);
+    return year_month_day(start_loc_days + d);
 }
 
 days daysLeft(const date::year_month_day& ymd)
 {
     return static_cast<local_days>(ymd) -
         local_days_till_today();
+}
+
+date::year_month_day subDays(const date::year_month_day& ymd,
+    date::days d)
+{
+    return addDays(ymd, days(- d.count()));
 }
 

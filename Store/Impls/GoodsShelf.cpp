@@ -81,7 +81,8 @@ std::vector<Supply> GoodsShelf::removeNGoodsExpiringSoonest(
     if(! hasEnough(to_remove))
         { throw Lack(goods(), to_remove); }
 
-    vector<Supply> removed(to_remove * 40);
+    vector<Supply> removed(to_remove / 40);
+
     amount_t sum = 0;
 
     while(sum < to_remove)

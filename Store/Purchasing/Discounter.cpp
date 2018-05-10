@@ -73,5 +73,16 @@ float* Discounter::getMaxDiscount(const Supply& supply)
     return new float((it)->second);
 }
 
+date::days Discounter::maxDiscountPeriod()
+{
+    return kDiscounts.at(kDiscounts.size() - 1).first;
+}
+
+date::days Discounter::minDiscountPeriod()
+{
+    return kDiscounts.at(0).first;
+}
+
+
 
 

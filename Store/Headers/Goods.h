@@ -11,9 +11,9 @@
 class Goods
 {
 public:
-    Goods (size_t id,
+    Goods(size_t id,
         const std::string& name,
-        int price_per_item,
+        double price_per_item,
         size_t freshness_period);
     Goods();
 
@@ -24,15 +24,15 @@ public:
     const std::string& name() const;
     void setName (const std::string&);
 
-    int pricePerItem () const;
-    void setPricePerItem (int);
+    double pricePerItem() const;
+    void setPricePerItem(double);
 
     date::days freshnessPeriod() const;
     void setFreshnessPeriod(date::days);
 
 private:
     size_t id_;
-    int price_per_item_;
+    double price_per_item_;
     std::string name_;
     date::days freshness_period_;
 };

@@ -25,7 +25,7 @@ public:
     // amount of items of all goods
     amount_t totalAmount() const;
     
-    int cash() const;
+    double cash() const;
     //endregion
     //region registering
     

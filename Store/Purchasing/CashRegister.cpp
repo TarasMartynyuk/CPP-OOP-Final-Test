@@ -9,7 +9,7 @@ using namespace std;
 CashRegister::CashRegister(Store& store)
     : store_(store), cash_(0) {}
 
-CashRegister::amount_t CashRegister::cash() const
+double CashRegister::cash() const
     { return cash_; }
 
 void CashRegister::makePurchase(
@@ -32,20 +32,26 @@ void CashRegister::makePurchase(
         Store::amount_t amount = purch.at(id);
         
         vector<Supply> supplies = store_.exclude (id, amount);
-        
-        cash_ += costs (supplies,
+
+        vector<DiscountedSupply> discounted_supplies = Discounter::applyDiscountsIfNeeded(supplies);
+
+        cash_ += costs (discounted_supplies,
                         store_.goodsForId(id).pricePerItem());
     }
 }
 
-int CashRegister::costs (
-    const vector<Supply>& supplies, int cost_per_item)
+double CashRegister::costs(
+    const vector<DiscountedSupply>& supplies,
+    double cost_per_item)
 {
     assert(cost_per_item > 0);
-    return accumulate(supplies.begin(), supplies.end(), 0,
-                      [cost_per_item](int sum, const Supply& supply)
+    return accumulate(supplies.begin(), supplies.end(), 0.0,
+                      [cost_per_item](double sum, const DiscountedSupply& d_supply)
                       {
-                          return sum + supply.amount() * cost_per_item;
+                          double discounted_cost = d_supply.second == nullptr ?
+                                                    cost_per_item : cost_per_item *
+                                                                    (*d_supply.second);
+                          return sum + d_supply.first.amount() * discounted_cost;
                       });
 }
 

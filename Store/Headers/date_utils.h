@@ -24,7 +24,13 @@ date::year_month_day addDays(
     const date::year_month_day& ymd,
     date::days days
     );
+date::year_month_day subDays(
+    const date::year_month_day& ymd,
+    date::days days
+);
 
 date::year_month_day today();
+
+
 
 #endif //OOPFINALEXAM_DATE_UTILS_H

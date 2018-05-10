@@ -5,9 +5,9 @@
 #include <iostream>
 using namespace std;
 
-Goods::Goods (size_t id,
+Goods::Goods(size_t id,
     const string& name,
-    int price_per_item,
+    double price_per_item,
     size_t freshness_period)
     : id_(id), name_(name),
       price_per_item_(price_per_item),
@@ -31,10 +31,10 @@ const string& Goods::name() const
 void Goods::setName (const std::string& name)
     { name_ = name; }
 
-int Goods::pricePerItem () const
+double Goods::pricePerItem() const
     { return price_per_item_; }
 
-void Goods::setPricePerItem (int price)
+void Goods::setPricePerItem(double price)
 {
     if( price <= 0)
         { throw invalid_argument("price must be > 0"); }

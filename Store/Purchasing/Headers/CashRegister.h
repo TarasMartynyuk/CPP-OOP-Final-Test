@@ -15,10 +15,11 @@ class CashRegister
 {
 public:
     using amount_t = GoodsShelf::amount_t;
+    using DiscountedSupply = std::pair<Supply, float*>;
 
     explicit CashRegister (Store&);
 
-    amount_t cash() const;
+    double cash() const;
 
     // excludes items from purchase from store,
     // and adds cash
@@ -28,11 +29,11 @@ public:
     void makePurchase(const std::unordered_map<size_t, amount_t>& purch);
 
 private:
-    int cash_;
+    double cash_;
     Store& store_;
     
-    int costs (const std::vector<Supply>& supplies,
-        int cost_per_item);
+    double costs(const std::vector<DiscountedSupply>& supplies,
+        double cost_per_item);
 };
 
 

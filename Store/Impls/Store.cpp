@@ -49,7 +49,7 @@ void Store::include(const GoodsSupply& g_supply)
     if(! goodsRegistered(g_supply.goods()))
         { throw GoodsNotRegistered(g_supply.goods()); }
 
-    if(isInFuture(g_supply.dateManufactured()))
+    if(! isInPast(g_supply.dateManufactured()))
         { throw invalid_argument("manufacturing_date must be in the past");}
 
     auto exp_date = addDays(g_supply.dateManufactured(),
@@ -131,7 +131,7 @@ Store::amount_t Store::totalAmount() const
         });
 }
 
-int Store::cash() const
+double Store::cash() const
 {
     return cash_register_->cash();
 }//endregion

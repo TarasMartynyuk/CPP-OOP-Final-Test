@@ -16,7 +16,9 @@ using amount_t_sh = GoodsShelf::amount_t;
 int main()
 {
     run_all_tests();
+//    auto tod = today();
 
+//    cout << addDays(today(), days(30));
 
     return 0;
 }

@@ -12,8 +12,8 @@ using namespace date;
 //region defs
 
 using amount_c = CashRegister::amount_t;
-static const Goods nice_goods(0, "nice goods", 13, 4);
-static const Goods soso_goods(1, "so-so goods", 6, 25);
+static const Goods nice_goods(0, "nice goods", 13, 10);
+static const Goods soso_goods(1, "so-so goods", 9, 25);
 
 static const amount_c kNiceAmount = 4;
 static const amount_c kSosoAmount = 7;
@@ -28,11 +28,12 @@ void run_all_purch_tests()
     MakePurch_ThrowsLack_IfPurchAmount_GraterThanStoreHas();
     MakePurch_ThrowsLack_IfMoreItemsOfGoodsInPurch_ThanStoreHas();
     MakePurch_ChangesShelvesTotalAmount_ByPurchaseAmount();
-    MakePurch_AddsPurchSum_ToCash();
+    MakePurch_IncreasesCash();
 
     Discount_Throws_IfExpired();
     Discount_ReturnsNulls_IfNoOneQualifies();
     Discount_ReturnsOneNotNull_IfOneQualifies();
+    Discount_DiscountedPrice_LessThenNormal();
 }
 
 //region purch
@@ -86,7 +87,7 @@ void MakePurch_ChangesShelvesTotalAmount_ByPurchaseAmount()
     logPassed(__FUNCTION__);
 }
 
-void MakePurch_AddsPurchSum_ToCash()
+void MakePurch_IncreasesCash()
 {
     Store st = testStore();
     
@@ -95,13 +96,11 @@ void MakePurch_AddsPurchSum_ToCash()
         {nice_goods.id(), kNiceAmount },
         {soso_goods.id(), kSosoAmount - 1 }
     };
-    int purch_sum = kNiceAmount * nice_goods.pricePerItem() +
-        (kSosoAmount - 1) * soso_goods.pricePerItem();
-    int old_cash = st.cash();
+    double old_cash = st.cash();
     
     st.makePurchase(purch);
     
-    assert(st.cash() == old_cash + purch_sum);
+    assert(st.cash() > old_cash);
     logPassed(__FUNCTION__);
 }//endregion
 
@@ -109,8 +108,7 @@ void MakePurch_AddsPurchSum_ToCash()
 
 void Discount_ReturnsNulls_IfNoOneQualifies()
 {
-    days max_discount_days = Discounter::kDiscounts.
-        at(Discounter::kDiscounts.size() - 1).first;
+    days max_discount_days = Discounter::maxDiscountPeriod();
 
     days days1(max_discount_days.count() + 3);
     days days2(max_discount_days.count() + 7);
@@ -146,8 +144,7 @@ void Discount_Throws_IfExpired()
 
 void Discount_ReturnsOneNotNull_IfOneQualifies()
 {
-    days max_discount_days = Discounter::kDiscounts.
-        at(Discounter::kDiscounts.size() - 1).first;
+    days max_discount_days = Discounter::maxDiscountPeriod();
 
     days days1(max_discount_days.count() - 3);
     days days2(max_discount_days.count() -5);
@@ -167,6 +164,42 @@ void Discount_ReturnsOneNotNull_IfOneQualifies()
     logPassed(__FUNCTION__);
 }
 
+void Discount_DiscountedPrice_LessThenNormal()
+{
+    Store st;
+    Store st_with_discounts;
+
+    auto disc_days = Discounter::maxDiscountPeriod().count();
+    Goods goods(0, "smth", 1.0, disc_days + 5);
+
+    st.registerGoods(goods, 0);
+    st_with_discounts.registerGoods(goods, 0);
+
+    days more_than_discount (disc_days + 1);
+    days with_discount(disc_days - 1);
+
+    auto no_discount_exp_date = addDays(today(), more_than_discount);
+    auto discount_exp_date = addDays(today(), with_discount);
+
+    auto no_discount_manufactured = subDays(no_discount_exp_date,
+                                            goods.freshnessPeriod());
+    auto discount_manufactured = subDays(discount_exp_date,
+                                         goods.freshnessPeriod());
+
+    st.include(GoodsSupply(nice_goods, 5,
+                           no_discount_manufactured));
+    st_with_discounts.include(GoodsSupply(nice_goods, 5,
+                                          discount_manufactured));
+
+    Purch purch { {goods.id(), 3} };
+
+    st.makePurchase(purch);
+    st_with_discounts.makePurchase(purch);
+
+    assert(st.cash() < st_with_discounts.cash());
+    logPassed(__FUNCTION__);
+}
+
 Store testStore()
 {
     Store st;
@@ -175,10 +208,10 @@ Store testStore()
     st.registerGoods(soso_goods, 0);
 
     st.include(GoodsSupply(
-        nice_goods, kNiceAmount, today()));
+        nice_goods, kNiceAmount, subDays(today(), days(1))));
 
     st.include(GoodsSupply(
-        soso_goods, kSosoAmount, today()));
+        soso_goods, kSosoAmount, subDays(today(), days(1))));
 
     return st;
 }

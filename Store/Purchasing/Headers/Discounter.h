@@ -21,6 +21,9 @@ public:
     static std::vector<DiscountedSupply> applyDiscountsIfNeeded(
         std::vector<Supply>&);
 
+    static date::days maxDiscountPeriod();
+    static date::days minDiscountPeriod();
+
 private:
     // returns nullptr if no discount can be assigned
     static float* getMaxDiscount(const Supply&);
