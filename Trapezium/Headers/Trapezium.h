@@ -1,18 +1,23 @@
-//
+ //
 // Created by Taras Martynyuk on 5/2/2018.
 //
-
 #ifndef OOPFINALEXAM_TRAPEZIUM_H
 #define OOPFINALEXAM_TRAPEZIUM_H
-
+namespace Trapezium
+{
 
 class Trapezium
 {
 public:
-    int area() { return doArea(); }
+    double area() const
+        { return doArea(); }
+
+    virtual ~Trapezium() = default;
+
 private:
-    virtual int doArea() = 0;
+    virtual double doArea() const = 0;
+
 };
 
-
+} //Trapezium
 #endif //OOPFINALEXAM_TRAPEZIUM_H
