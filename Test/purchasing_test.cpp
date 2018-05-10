@@ -30,7 +30,9 @@ void run_all_purch_tests()
     MakePurch_ChangesShelvesTotalAmount_ByPurchaseAmount();
     MakePurch_AddsPurchSum_ToCash();
 
+    Discount_Throws_IfExpired();
     Discount_ReturnsNulls_IfNoOneQualifies();
+    Discount_ReturnsOneNotNull_IfOneQualifies();
 }
 
 //region purch
@@ -107,14 +109,16 @@ void MakePurch_AddsPurchSum_ToCash()
 
 void Discount_ReturnsNulls_IfNoOneQualifies()
 {
-    days min_discount_days = Discounter::kDiscounts.at(0).first;
+    days max_discount_days = Discounter::kDiscounts.
+        at(Discounter::kDiscounts.size() - 1).first;
 
-    assert(min_discount_days > days(0));
+    days days1(max_discount_days.count() + 3);
+    days days2(max_discount_days.count() + 7);
 
     vector<Supply> supplies
         {
-            Supply(4, today()),
-            Supply(4, today()),
+            Supply(4, addDays(today(), days1)),
+            Supply(4, addDays(today(), days2)),
         };
 
     auto disc_supplies = Discounter::applyDiscountsIfNeeded(supplies);
@@ -122,6 +126,43 @@ void Discount_ReturnsNulls_IfNoOneQualifies()
     assert(all_of(disc_supplies.begin(), disc_supplies.end(),
                   [](const DiscSupply& d_supply){
                       return d_supply.second == nullptr;
+                  }));
+    logPassed(__FUNCTION__);
+}
+
+void Discount_Throws_IfExpired()
+{
+    vector<Supply> supplies
+    {
+        Supply(4, addDays(today(), days(-5))),
+        Supply(4, addDays(today(), days(-10))),
+    };
+
+    assert(expressionThrows<invalid_argument>([&supplies](){
+        Discounter::applyDiscountsIfNeeded(supplies);
+    }));
+    logPassed(__FUNCTION__);
+}
+
+void Discount_ReturnsOneNotNull_IfOneQualifies()
+{
+    days max_discount_days = Discounter::kDiscounts.
+        at(Discounter::kDiscounts.size() - 1).first;
+
+    days days1(max_discount_days.count() - 3);
+    days days2(max_discount_days.count() -5);
+
+    vector<Supply> supplies
+        {
+            Supply(4, addDays(today(), days1)),
+            Supply(4, addDays(today(), days2)),
+        };
+
+    auto disc_supplies = Discounter::applyDiscountsIfNeeded(supplies);
+
+    assert(any_of(disc_supplies.cbegin(), disc_supplies.cend(),
+                  [](const DiscSupply& d_supply){
+                      return d_supply.second != nullptr;
                   }));
     logPassed(__FUNCTION__);
 }

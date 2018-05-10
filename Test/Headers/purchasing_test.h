@@ -12,7 +12,8 @@ void MakePurch_ChangesShelvesTotalAmount_ByPurchaseAmount();
 void MakePurch_AddsPurchSum_ToCash();
 
 void Discount_ReturnsNulls_IfNoOneQualifies();
-void Discount_ReturnsNotNull_IfOneQualifies();
+void Discount_ReturnsOneNotNull_IfOneQualifies();
+void Discount_Throws_IfExpired();
 
 // TODO: test that the amount is changed correctly
 // separately for each goods in purch

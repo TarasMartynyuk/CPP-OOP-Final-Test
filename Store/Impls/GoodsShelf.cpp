@@ -137,10 +137,10 @@ bool GoodsShelf::hasEnough(GoodsShelf::amount_t amount) const
 }
 //endregion
 
-std::ostream& operator<<(std::ostream& os, const GoodsShelf& supplies)
+std::ostream& operator<<(std::ostream& os, const GoodsShelf& shelf)
 {
-    os << " { goods : " << supplies.goods()
-       << "\n\t totalAmount : " << supplies.totalAmount()
-       << "\n\t minAmount : " << supplies.minAmount()
+    os << " { goods : " << shelf.goods()
+       << "\n\t totalAmount : " << shelf.totalAmount()
+       << "\n\t minAmount : " << shelf.minAmount()
        << "\n}";
 }

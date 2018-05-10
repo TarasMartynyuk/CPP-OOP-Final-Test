@@ -66,7 +66,7 @@ private:
     const Supply& peekSupplyExpiringSoonest() const;
 };
 
-std::ostream& operator<<(std::ostream& os, const GoodsShelf & supplies);
+std::ostream& operator<<(std::ostream& os, const GoodsShelf & shelf);
 
 
 #endif //OOPFINALEXAM_GOODSINFO_H

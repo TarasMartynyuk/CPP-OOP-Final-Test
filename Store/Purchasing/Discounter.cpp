@@ -37,6 +37,14 @@ bool discountsSorted()
 
 vector<DiscSupply> Discounter::applyDiscountsIfNeeded(std::vector<Supply>& supplies)
 {
+    bool any_expired =
+    any_of(supplies.begin(), supplies.end(),
+              [](const Supply& s){
+                  return isInPast(s.expirationDate());
+              });
+    if (any_expired)
+        { throw invalid_argument("at least one of supplies has expired"); }
+
     assert(discountsSorted());
 
     vector<DiscSupply> result(supplies.size());
@@ -49,20 +57,20 @@ vector<DiscSupply> Discounter::applyDiscountsIfNeeded(std::vector<Supply>& suppl
 
 float* Discounter::getMaxDiscount(const Supply& supply)
 {
+    assert(isInFuture(supply.expirationDate()));
     assert(discountsSorted());
 
     days left_till_expire = daysLeft(supply.expirationDate());
-    // first discount whose date has not yet come
-    auto it = upper_bound(kDiscounts.begin(), kDiscounts.end(),
-                          std::make_pair(left_till_expire, -1),
-                          [](const DiscountToPeriod& left, const DiscountToPeriod& right){
-                              return left.first < right.first;
+    // first discount with period greater or eq to time left for supply to expire
+    auto it = find_if(kDiscounts.cbegin(), kDiscounts.cend(),
+                          [left_till_expire](const DiscountToPeriod& el){
+                              return el.first >= left_till_expire;
                           });
-//    // no discount has period which is <= than supply's period
-    if(it == kDiscounts.begin())
+    // no discount has period which is <= than supply's period
+    if(it == kDiscounts.end())
         { return nullptr; }
 //    // looks dangerous...
-    return new float((--it)->second);
+    return new float((it)->second);
 }
 
 

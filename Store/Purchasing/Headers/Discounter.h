@@ -22,7 +22,7 @@ public:
         std::vector<Supply>&);
 
 private:
-    // retugns nullptr if no discount can be assigned
+    // returns nullptr if no discount can be assigned
     static float* getMaxDiscount(const Supply&);
 };
 

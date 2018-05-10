@@ -5,6 +5,7 @@
 #include "date_utils.h"
 using namespace date;
 
+//TODO: throw if expired
 Supply::Supply(
     Supply::amount_t amount,
     const year_month_day& expiration_date)
