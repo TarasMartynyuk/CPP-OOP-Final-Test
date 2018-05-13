@@ -21,7 +21,7 @@ public:
         const std::chrono::duration<Rep, Period>& period)
     {
         if (thread_ != nullptr)
-        { throw std::runtime_error("the excluder has already started"); }
+            { throw std::runtime_error("the excluder has already started"); }
 
         auto repeat_action = [this, &period]()
         {

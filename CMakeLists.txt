@@ -21,15 +21,15 @@ execute_process(COMMAND "${CMAKE_COMMAND}" --build .
 add_subdirectory("${CMAKE_BINARY_DIR}/dateh-src" "${CMAKE_BINARY_DIR}/dateh-build")
 
 file(GLOB_RECURSE store_src ./Store/*.h ./Store/*.cpp)
-#file(GLOB_RECURSE test_src ./Test/*.h ./Test/*.cpp)
-#file(GLOB_RECURSE trapezium_src ./Trapezium/*.h ./Trapezium/*.cpp)
+file(GLOB_RECURSE test_src ./Test/*.h ./Test/*.cpp)
+file(GLOB_RECURSE trapezium_src ./Trapezium/*.h ./Trapezium/*.cpp)
 
 
 add_executable(OOPFinalExam ${store_src} ${trapezium_src} ${test_src} main.cpp)
 
 # Include headers dir to enable intellisence
 target_include_directories(OOPFinalExam PRIVATE . Store/Headers Store/Purchasing/Headers)
-#target_include_directories(OOPFinalExam PRIVATE . Test/Headers)
+target_include_directories(OOPFinalExam PRIVATE . Test/Headers)
 target_include_directories(OOPFinalExam PRIVATE . Trapezium/Headers)
 
 

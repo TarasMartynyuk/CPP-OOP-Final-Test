@@ -53,9 +53,9 @@ std::vector<Supply> GoodsShelf::removeNGoodsExpiringSoonest(
     GoodsShelf::amount_t to_remove)
 {
     if(to_remove <= 0)
-    { throw invalid_argument("cannot remove less than 1 items"); }
+        { throw invalid_argument("cannot remove less than 1 items"); }
     if(! hasEnough(to_remove))
-    { throw Lack(goods(), to_remove); }
+        { throw Lack(goods(), to_remove); }
 
     vector<Supply> removed(to_remove / 40);
 

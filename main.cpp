@@ -1,55 +1,10 @@
-#include <iostream>
-//#include "Goods.h"
-#include "date.h"
-//#include "date_utils.h"
-#include <chrono>
-//#include "GoodsSupply.h"
-#include "Store.h"
-//#include "test.h"
-using namespace std;
-using namespace date;
-
-//void storeDemo();
-void trap_tests();
-
-//using amount_t_sh = GoodsShelf::amount_t;
-#include "ExpiredGoodsExcluder.h"
-#include "Trapezium.h"
-#include "LinearTrapezium.h"
-using namespace Trapezium;
+#include "test.h"
 
 int main()
 {
-//    run_all_tests();
-
-//    repeatAction(f, days(1));
-    Store st;
-
+    run_all_tests();
     return 0;
 }
-
-void trap_tests()
-{
-//    LinearFunc lf(1, 0);
-//
-//    cout << "k*1 + b = " << lf(1);
-//    LinearTrapezium lt(Segment1D(1, 10), 1, 0);
-//    cout << "area of trap (1, 10), k = 1, b = 0 : \n" << lt.area();
-}
-
-
-//void datePlaying()
-//{
-//    auto zone = locate_zone("Europe/Tallinn");
-//    auto utc_time = system_clock::now();
-//    auto z_time = make_zoned(zone, utc_time);
-//    auto z_days = floor<days>(z_time.get_local_time());
-//    auto z_date = year_month_day(z_days);
-//
-//    std::cout << "UTC time :"  << utc_time<< '\n';
-//    std::cout << "Local Time: " << z_time.get_local_time() << '\n';
-//    std::cout << z_date << '\n';
-//}
 
 //#include "test_utils.h"
 //void storeDemo()
@@ -66,18 +21,5 @@ void trap_tests()
 //    cout << "just registered: \n";
 //    st.registerGoods(unicorn_wand, 5);
 //    st.registerGoods(fenix_wand, 10);
-//    st.show();
-//
-////    cout << "\nincluded supplies: \n";
-////    st.include(GoodsSupply(unicorn_wand, 7, kInPast));
-////    st.include(unicorn_wand, Supply(15, kInPast, kInFutureLater));
-////
-////    st.include(fenix_wand, Supply(17, kInPast, kInFutureSooner));
-////    st.include(fenix_wand, Supply(19, kInPast, kInFutureLater));
-////    st.show();
-//
-//    cout << "\nexcluded supplies: \n";
-//    st.exclude(unicorn_wand, 9);
-//    st.exclude(fenix_wand, 12);
 //    st.show();
 //}
