@@ -24,7 +24,7 @@ public:
     amount_t totalAmount(const Goods& goods) const;
     
     // amount of items of all goods
-    // should probably cash that...
+    // should probably cache that...
     amount_t totalAmount() const;
     
     double cash() const;
